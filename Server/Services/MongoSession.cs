@@ -9,10 +9,20 @@ namespace Server.Services
 
     public class MongoSession
     {
+        private IMongoDatabase? session;
+        public IMongoDatabase Session
+        {
+            get
+            {
+                if (session == null)
+                {
+                    var settings = MongoClientSettings.FromConnectionString("mongodb+srv://admin:admin@fleamarket.z2vvq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+                    var client = new MongoClient(settings);
+                    session = client.GetDatabase("FleaMarket");
+                }
 
-        var settings = MongoClientSettings.FromConnectionString("mongodb+srv://admin:admin@fleamarket.z2vvq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
-        var client = new MongoClient(settings);
-        var database = client.GetDatabase("FleaMarket");
-
+                return session;
+            }
+        }
     }
 }
