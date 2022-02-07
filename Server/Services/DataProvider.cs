@@ -19,7 +19,7 @@ namespace Server.Services
         }
 
 
-        public bool Register(User user)
+        public User? Register(User user)
         {
             var collection = Session.GetCollection<User>("Users");
 
@@ -40,22 +40,18 @@ namespace Server.Services
                 };
 
                 collection.InsertOne(r);
-                return true;
+                return r;
             }
-            return false;
+            return null;
         }
 
-        public bool LogIn(string username, string password)
+        public User LogIn(string username, string password)
         {
             var collection = Session.GetCollection<User>("Users");
 
             var u = collection.Find(x => x.Username == username && x.Password == password).FirstOrDefault();
 
-            if (u == null)
-            {
-                return false;
-            }
-            return true;
+            return u;
         }
 
         public bool CreateProduct(Product product, string username)
@@ -78,17 +74,17 @@ namespace Server.Services
 
             };
 
-
-            collectionProduct.InsertOne(p);
-            
-
             ProductView pv = new ProductView
             {
                 Name = product.Name,
                 Price = product.Price,
-                Product = p._id,
-                User = user._id
+                User = user._id,
+                _id = p._id
             };
+
+
+            collectionProduct.InsertOne(p);
+            
 
             collectionProductView.InsertOne(pv);
 
@@ -99,6 +95,111 @@ namespace Server.Services
             collectionUser.UpdateOne(filter,update);
             return true;
 
+        }
+
+        internal bool ChangeCity(string username, string city)
+        {
+            var collectionUser = Session.GetCollection<User>("Users");
+
+            var user = collectionUser.Find(x => x.Username == username).FirstOrDefault();
+
+            var filter = Builders<User>.Filter.Eq("Username", username);
+            var update = Builders<User>.Update.Set("City", city);
+            collectionUser.UpdateOne(filter, update);
+
+            return true;
+        }
+
+        internal bool GiveMeMoney(string username, int cash)
+        {
+            var collectionUser = Session.GetCollection<User>("Users");
+
+            var user = collectionUser.Find(x => x.Username == username).FirstOrDefault();
+
+            var filter = Builders<User>.Filter.Eq("Username", username);
+            var update = Builders<User>.Update.Set("Money", user.Money + cash);
+            collectionUser.UpdateOne(filter, update);
+
+            return true;
+        }
+
+        internal bool ChangeContact(string username, string contact)
+        {
+            var collectionUser = Session.GetCollection<User>("Users");
+
+            var user = collectionUser.Find(x => x.Username == username).FirstOrDefault();
+
+            var filter = Builders<User>.Filter.Eq("Username", username);
+            var update = Builders<User>.Update.Set("Contact", contact);
+            collectionUser.UpdateOne(filter, update);
+
+            return true;
+        }
+
+        internal bool ChangePassword(string username, string oldPassword, string newPassword)
+        {
+            var collectionUser = Session.GetCollection<User>("Users");
+
+            var user = collectionUser.Find(x => x.Username == username).FirstOrDefault();
+
+            if (user.Password != oldPassword)
+                return false;
+
+            var filter = Builders<User>.Filter.Eq("Username", username);
+            var update = Builders<User>.Update.Set("Password", newPassword);
+            collectionUser.UpdateOne(filter, update);
+
+            return true;
+        }
+
+        internal void UpdateProduct(Product product)
+        {
+            var collectionProduct = Session.GetCollection<Product>("Products");
+            var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
+
+            ProductView pView = collectionProductView.Find<ProductView>(x => x._id == product._id).FirstOrDefault<ProductView>();
+            Product p = collectionProduct.Find<Product>(x => x._id == product._id).FirstOrDefault<Product>();
+
+            p.Price = product.Price;
+            p.Name = product.Name;
+            p.ImgUrl = product.ImgUrl;
+            p.Description = product.Description;
+            p.Tags = product.Tags;
+            p.CustomAttributes = product.CustomAttributes;
+
+            var filter = Builders<Product>.Filter.Eq("_Id", product._id);
+
+            collectionProduct.ReplaceOne(filter, p);
+
+            pView.Price = product.Price;
+            pView.Name = product.Name;
+
+            var filter2 = Builders<ProductView>.Filter.Eq("_Id", product._id);
+
+            collectionProductView.ReplaceOne(filter2, pView);
+        }
+
+        internal void DeleteProduct(string id)
+        {
+            var collectionProduct = Session.GetCollection<Product>("Products");
+            var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
+            var collectionUser = Session.GetCollection<User>("Users");
+
+
+            ObjectId objectId = ObjectId.Parse(id);
+
+            ProductView p = collectionProductView.Find<ProductView>(x => x._id == objectId).FirstOrDefault<ProductView>();
+
+            User u = collectionUser.Find<User>(x => x._id == p.User).FirstOrDefault<User>();
+
+            u.Products.Remove(objectId);
+
+            var filter = Builders<User>.Filter.Eq("Username", u.Username);
+            var update = Builders<User>.Update.Set("Products", u.Products);
+            collectionUser.UpdateOne(filter, update);
+
+            collectionProduct.DeleteOne<Product>(x => x._id == objectId);
+            collectionProductView.DeleteOne<ProductView>(x => x._id == objectId);
         }
 
         public List<ProductView> GetMyProducts(string username, int page)
@@ -120,25 +221,13 @@ namespace Server.Services
 
         }
 
-        public Product GetProductDetails(ObjectId id)
+        public Product GetProductDetails(string id)
         {
             var collection = Session.GetCollection<Product>("Products");
-            var product = collection.Find(x => x._id == id).FirstOrDefault();
+            Product product = collection.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
 
-           
 
-            Product p = new Product
-            {
-                Name = product.Name,
-                Price = product.Price,
-                Description = product.Description,
-                ImgUrl = product.ImgUrl,
-                CustomAttributes = product.CustomAttributes,
-                Tags = product.Tags,
-                _id = product._id
-            };
-
-            return p;
+            return product;
         }
     }
 }

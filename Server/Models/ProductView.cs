@@ -14,8 +14,6 @@ namespace Server.Models
         public ObjectId _id { get; set; }
         public string? Name { get; set; }
         public int Price { get; set; }
-
-        public ObjectId? Product { get; set; }
         public ObjectId? User { get; set; }
 
     }

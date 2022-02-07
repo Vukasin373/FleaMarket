@@ -27,8 +27,9 @@ namespace Server.Controllers
         [Route("LogIn/{username}&{password}")]
         public IActionResult LogIn(string username, string password)
         {
-            if (data.LogIn(username,password))
-                return Ok();
+            var a = data.LogIn(username, password);
+            if (a != null)
+                return Ok(a);
             return BadRequest();
         }
 
@@ -36,8 +37,9 @@ namespace Server.Controllers
         [Route("Register")]
         public IActionResult Register([FromBody] User user)
         {
-            if (data.Register(user))
-                return Ok();
+            var a = data.Register(user);
+            if (a != null)
+                return Ok(a);
             return BadRequest();
         }
 
@@ -58,39 +60,62 @@ namespace Server.Controllers
 
         }
 
-        [HttpPost]
-        [Route("GetProductDetails")]
-        public Product GetProductDetails([FromBody]ObjectId id)
+        [HttpGet]
+        [Route("GetProductDetails/{id}")]
+        public Product GetProductDetails(string id)
         {
             return data.GetProductDetails(id);
 
         }
 
+        [HttpPut]
+        [Route("UpdateProduct/")]
+        public void UpdateProduct([FromBody]Product product)
+        {
+            data.UpdateProduct(product);
+        }
 
+        [HttpDelete]
+        [Route("DeleteProduct/{id}")]
+        public void DeleteProduct(string id)
+        {
+            data.DeleteProduct(id);
+        }
 
+        [HttpPut]
+        [Route("ChangePassword/{username}&{oldPassword}&{newPassword}")]
+        public IActionResult ChangePassword(string username, string oldPassword, string newPassword)
+        {
+            if (data.ChangePassword(username, oldPassword, newPassword))
+                return Ok();
+            else return BadRequest();
+        }
 
+        [HttpPatch]
+        [Route("ChangeCity/{username}&{City}")]
+        public IActionResult ChangeCity(string username, string City)
+        {
+            if (data.ChangeCity(username, City))
+                return Ok();
+            else return BadRequest();
+        }
 
+        [HttpPatch]
+        [Route("ChangeContact/{username}&{Contact}")]
+        public IActionResult ChangeContact(string username, string Contact)
+        {
+            if (data.ChangeContact(username, Contact))
+                return Ok();
+            else return BadRequest();
+        }
 
-
-
-        //[HttpGet]
-        //[Route("GetProducts")]
-        //public async Task<List<Product>> GetProducts()
-        //{
-        //    var p =  data.Session.GetCollection<Product>("Product");
-        //    List<ObjectId>
-        //    var radnici= p.Find<Product>(FilterDefinition<Product>.Empty);
-        //    foreach (Product r in radnici.ToList<Product>())
-        //    {
-        //        System.Console.WriteLine(r.Name);
-        //    }
-        //    return await radnici.ToListAsync<Product>();
-
-
-        //}
-
-
-
-
+        [HttpPatch]
+        [Route("GiveMeMoney/{username}&{Cash}")]
+        public IActionResult GiveMeMoney(string username, int Cash)
+        {
+            if (data.GiveMeMoney(username, Cash))
+                return Ok();
+            else return BadRequest();
+        }
     }
 }
