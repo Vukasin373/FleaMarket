@@ -18,7 +18,14 @@ namespace Server.Models
         public string? Description { get; set; }
         public string? Name { get; set; }
 
-        public List<string>? Tags { get; set; }
-        public List<CustomAttribute>? CustomAttributes { get; set; }
+        public List<string> Tags { get; set; }
+        public List<CustomAttribute> CustomAttributes { get; set; }
+
+        public Product()
+        {
+            Tags = new List<string>();
+            CustomAttributes = new List<CustomAttribute>();
+            _id = ObjectId.GenerateNewId();
+        }
     }
 }

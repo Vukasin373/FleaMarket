@@ -11,7 +11,7 @@ namespace Server.Models
 
     public class User
     {
-        public ObjectId _id { get; set; }
+        public ObjectId? _id { get; set; }
         public string? Username { get; set; }
         public string? Password { get; set; }
         public string? FirstName { get; set; }
@@ -19,8 +19,15 @@ namespace Server.Models
         public string? City { get; set; }
         public string? Contact { get; set; }
         public int Money { get; set; }
-        public List<Notification>? Notifications{ get; set; }
-        public List<Product>? Products { get; set; }
+        public List<Notification> Notifications{ get; set; }
+        public List<ObjectId> Products { get; set; }
+
+        public User()
+        {
+            Notifications = new List<Notification>();
+            Products = new List<ObjectId>();
+            _id = ObjectId.GenerateNewId();
+        }
 
     }
 }
