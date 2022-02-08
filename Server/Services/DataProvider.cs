@@ -135,7 +135,7 @@ namespace Server.Services
             var update2 = Builders<User>.Update.Set("Money", buyer.Money - notification.Price);
             collectionUser.UpdateOne(filter2, update2);
 
-            return true;
+            return true; //d
         }
 
         internal bool ChangeCity(string username, string city)
