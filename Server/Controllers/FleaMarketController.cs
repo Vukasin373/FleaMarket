@@ -52,6 +52,15 @@ namespace Server.Controllers
             return BadRequest();
         }
 
+        [HttpPost]
+        [Route("CreateNotification/{id}")]
+        public IActionResult CreateNotification([FromBody] Notification notif, string id)
+        {
+            if (data.CreateNotification(notif, id))
+                return Ok();
+            return BadRequest();
+        }
+
         [HttpGet]
         [Route("GetMyProducts/{username}&{page}")]
         public List<ProductView> GetMyProducts(string username, int page)
@@ -123,6 +132,30 @@ namespace Server.Controllers
         public List<ProductView> GetSearchResults(string tag, int page, int minPrice, int maxPrice, bool asc)
         {
             return data.GetSearchResults(tag, page, minPrice, maxPrice, asc);
+
+        }
+
+        [HttpGet]
+        [Route("GetUserDetails/{id}")]
+        public List<String> GetUserDetails(string id)
+        {
+            return data.GetUserDetails(id);
+
+        }
+
+        [HttpGet]
+        [Route("GetNotifications/{username}")]
+        public List<Notification> GetNotifications(string username)
+        {
+            return data.GetNotifications(username);
+
+        }
+
+        [HttpPut]
+        [Route("BarterAnswer/{id}&{answer}&{ownerUsername}")]
+        public IActionResult BarterAnswer(string id, bool answer, string ownerUsername)
+        {
+            return data.BarterAnswer(id, answer, ownerUsername);
 
         }
     }

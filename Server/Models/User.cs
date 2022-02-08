@@ -20,12 +20,12 @@ namespace Server.Models
         public string? City { get; set; }
         public string? Contact { get; set; }
         public int Money { get; set; }
-        public List<Notification> Notifications{ get; set; }
+        public List<ObjectId> Notifications{ get; set; }
         public List<ObjectId> Products { get; set; }
 
         public User()
         {
-            Notifications = new List<Notification>();
+            Notifications = new List<ObjectId>();
             Products = new List<ObjectId>();
         }
 

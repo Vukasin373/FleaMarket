@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
@@ -95,6 +96,43 @@ namespace Server.Services
 
         }
 
+        internal bool CreateNotification(Notification notif, string id)
+        {
+            var collectionUser = Session.GetCollection<User>("Users");
+
+            var collectionNotification = Session.GetCollection<Notification>("Notifications");
+
+            var user = collectionUser.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
+
+            if (user.Money < notif.Price)
+                return false;
+
+            Notification notification = new Notification
+            {
+                FirstName = notif.FirstName,
+                LastName = notif.LastName,
+                Barter = notif.Barter,
+                Price = notif.Price,
+                ProductName = notif.ProductName,
+                Username = notif.Username,
+                ProductId = notif.ProductId
+            };
+
+            collectionNotification.InsertOne(notification);
+
+            user.Notifications.Add(notification._id);
+
+            var filter = Builders<User>.Filter.Eq("_id", user._id);
+            var update = Builders<User>.Update.Set("Notifications", user.Notifications);
+            collectionUser.UpdateOne(filter, update);
+
+            var filter2 = Builders<User>.Filter.Eq("_id", user._id);
+            var update2 = Builders<User>.Update.Set("Money", user.Money - notification.Price);
+            collectionUser.UpdateOne(filter2, update2);
+
+            return true;
+        }
+
         internal bool ChangeCity(string username, string city)
         {
             var collectionUser = Session.GetCollection<User>("Users");
@@ -105,6 +143,95 @@ namespace Server.Services
             var update = Builders<User>.Update.Set("City", city);
             collectionUser.UpdateOne(filter, update);
 
+            return true;
+        }
+
+        internal List<Notification> GetNotifications(string username)
+        {
+            var collectionUser = Session.GetCollection<User>("Users");
+            var user = collectionUser.Find(x => x.Username == username).FirstOrDefault();
+            var tmp = user.Notifications;
+
+            var collectionNotification = Session.GetCollection<Notification>("Notifications");
+            List<Notification> notifications = new List<Notification>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (user.Notifications.Count <= i)
+                    break;
+                var notif = collectionNotification.Find<Notification>(x => x._id == user.Notifications[i]).FirstOrDefault<Notification>();
+                notifications.Add(notif);
+                if (notif.Barter == false)
+                {
+                    var filter = Builders<Notification>.Filter.Eq("_id", user.Notifications[i]);
+                    collectionNotification.DeleteOne(filter);
+                    tmp.Remove(user.Notifications[i]);
+                }
+            }
+
+            var filter2 = Builders<User>.Filter.Eq("Username", username);
+            var update = Builders<User>.Update.Set("Notifications", tmp);
+            collectionUser.UpdateOne(filter2, update);
+
+            return notifications;
+        }
+
+        internal bool BarterAnswer(string id, bool answer, string username)
+        {
+            var collectionNotification = Session.GetCollection<Notification>("Notifications");
+            var notif = collectionNotification.Find<Notification>(x => x._id == ObjectId.Parse(id)).FirstOrDefault<Notification>();
+
+            var collectionUser = Session.GetCollection<User>("Users");
+
+            var buyer = collectionUser.Find(x => x.Username == notif.Username).FirstOrDefault();
+
+            var seller = collectionUser.Find(x => x.Username == username).FirstOrDefault();
+            var filterSeller = Builders<User>.Filter.Eq("Username", username);
+            if (answer)
+            {
+
+                var update = Builders<User>.Update.Set("Money", seller.Money + notif.Price);
+                collectionUser.UpdateOne(filterSeller, update);
+
+                DeleteProduct(notif.ProductId.ToString());
+
+                Notification n = new Notification
+                {
+                    Barter = false,
+                    FirstName = seller.FirstName,
+                    LastName = seller.LastName,
+                    Price = notif.Price,
+                    ProductName = notif.ProductName,
+                    Username = "Accepted"
+                };
+
+                CreateNotification(n, buyer._id.ToString());
+            }
+            else
+            {
+                Notification n = new Notification
+                {
+                    Barter = false,
+                    FirstName = seller.FirstName,
+                    LastName = seller.LastName,
+                    Price = notif.Price,
+                    ProductName = notif.ProductName,
+                    Username = "Declined"
+                };
+
+                var filterbuyer = Builders<User>.Filter.Eq("Username", buyer.Username);
+                var update = Builders<User>.Update.Set("Money", buyer.Money + notif.Price);
+                collectionUser.UpdateOne(filterbuyer, update);
+
+                CreateNotification(n, buyer._id.ToString());
+            }
+
+            seller.Notifications.Remove(notif._id);
+
+            var update2 = Builders<User>.Update.Set("Notifications", seller.Notifications);
+            collectionUser.UpdateOne(filterSeller, update2);
+
+            collectionNotification.DeleteOne(Builders<Notification>.Filter.Eq("_id", notif._id));
             return true;
         }
 
@@ -121,6 +248,30 @@ namespace Server.Services
             return true;
         }
 
+        internal List<String> GetUserDetails(string id)
+        {
+            ObjectId userId = ObjectId.Parse(id);
+            var collectionUser = Session.GetCollection<User>("Users");
+
+            var user = collectionUser.Find(x => x._id == userId).FirstOrDefault();
+
+            List<string> vs = new List<string>();
+#pragma warning disable CS8604 // Possible null reference argument.
+            vs.Add(user.FirstName);
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning disable CS8604 // Possible null reference argument.
+            vs.Add(user.LastName);
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning disable CS8604 // Possible null reference argument.
+            vs.Add(user.City);
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning disable CS8604 // Possible null reference argument.
+            vs.Add(user.Contact);
+#pragma warning restore CS8604 // Possible null reference argument.
+
+            return vs;
+        }
+
         internal List<ProductView> GetSearchResults(string tag, int page, int minPrice, int maxPrice, bool asc)
         {
             var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
@@ -133,7 +284,7 @@ namespace Server.Services
                           productView.Price <= maxPrice &&
                           productView.Tags.Contains(tag)
                           orderby productView.Price ascending
-                          select productView).Skip<ProductView>((page - 1) * 10).SkipLast<ProductView>(page * 10).ToList<ProductView>();
+                          select productView).Skip<ProductView>((page - 1) * 10).Take<ProductView>(10).ToList<ProductView>();
             }
             else
             {
@@ -142,7 +293,7 @@ namespace Server.Services
                           productView.Price <= maxPrice &&
                           productView.Tags.Contains(tag)
                           orderby productView.Price descending
-                          select productView).Skip<ProductView>((page - 1) * 10).SkipLast<ProductView>(page * 10).ToList<ProductView>();
+                          select productView).Skip<ProductView>((page - 1) * 10).Take<ProductView>(10).ToList<ProductView>();
             }
             return result;
         }
@@ -247,10 +398,11 @@ namespace Server.Services
 
         public Product GetProductDetails(string id)
         {
+            var collectionView = Session.GetCollection<ProductView>("ProductsView");
+            ProductView productView = collectionView.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
+
             var collection = Session.GetCollection<Product>("Products");
-            Product product = collection.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
-
-
+            Product product = collection.Find(x => x._id == productView._id).FirstOrDefault();
             return product;
         }
     }
