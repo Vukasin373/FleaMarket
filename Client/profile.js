@@ -27,8 +27,17 @@ export class Profile {
 
 		 labelArray.forEach((element,i) => {
 			 const row = document.createElement("h3");
-			 row.innerHTML = element +"        "+ infoArray[i];
+			 if(element=="Money:")
+			 {
+				row.innerHTML = element + infoArray[i] + " $";
+			 	
+			 }
+			 else
+			 	row.innerHTML = element + infoArray[i];
+
+			 row.className="user"+i;
 			 leftDiv.appendChild(row);
+			 
 		 });
 
 		 const middleDiv = document.createElement("div");
@@ -52,6 +61,7 @@ export class Profile {
 		 row1.appendChild(oldPassLabel);
 		 
 		 const oldPassInput = document.createElement("input");
+
 		 row1.appendChild(oldPassInput);
 
 		 const row2 = document.createElement("div");
@@ -67,11 +77,40 @@ export class Profile {
 
 		 const buttPass = document.createElement("button");
 		 buttPass.innerHTML = "Confirm";
-		 buttPass.className = "buttPass2";
+		 buttPass.className = "ui green button";
 		 firstMiddleDiv.appendChild(buttPass);
 
 		 buttPass.onclick = ()=>{
-			 alert("q");
+			if(oldPassInput.value=="")
+			alert("Input old password !");
+			else if(newPassInput.value =="")
+			alert("Input new password !");
+		   else
+		   {
+			   fetch(
+			   "https://localhost:7085/FleaMarket/ChangePassword/" + user.username+"&"+ oldPassInput.value +"&"+newPassInput.value,
+				   {
+				   method: "PUT",
+				   headers: {
+				   "Content-Length": 0
+				   },
+					   body: {}
+				   }
+				  ).then(p => {
+				   if (p.status == 200)
+				   {	
+				   alert("Password successfully changed !");
+				   }
+				   else if(p.status == 400)
+				   {
+					   alert("The old password is incorrect ");
+				   }
+				   else
+	   				{
+		   				console.log("Error");
+	   				}
+	   });
+	 }
 		 }
 
 		 const secondMiddleDiv = document.createElement("div");
@@ -95,11 +134,37 @@ export class Profile {
 
 		 const buttCity = document.createElement("button");
 		 buttCity.innerHTML = "Confirm";
-		 buttCity.className = "buttPass2";
+		 buttCity.className = "ui green button";
 		 secondMiddleDiv.appendChild(buttCity);
 
 		 buttCity.onclick = ()=>{
-			 alert("q");
+			if(cityInput.value=="")
+			alert("Input a new city");
+		   else
+		   {
+			   fetch(
+			   "https://localhost:7085/FleaMarket/ChangeCity/" + user.username+"&"+ cityInput.value,
+				   {
+				   method: "PATCH",
+				   headers: {
+				   "Content-Length": 0
+				   },
+					   body: {}
+				   }
+				  ).then(p => {
+				   if (p.status == 200)
+				   {	
+				   user.city = cityInput.value;
+				   const city = this.container.querySelector(".user4");
+					
+					 city.innerHTML = "City: "+user.city;
+				   }	
+	   else
+	   {
+		   console.log("Error");
+	   }
+	   });
+	 }
 		 }
 
 		 const thirdMiddleDiv = document.createElement("div");
@@ -123,11 +188,37 @@ export class Profile {
 
 		 const buttContact = document.createElement("button");
 		 buttContact.innerHTML = "Confirm";
-		 buttContact.className = "buttPass2";
+		 buttContact.className = "ui green button";
 		 thirdMiddleDiv.appendChild(buttContact);
 
 		 buttContact.onclick = ()=>{
-			 alert("q");
+			if(contactInput.value=="")
+				alert("Input a contact");
+	  		 else
+	 		  {
+	  			 fetch(
+		 		  "https://localhost:7085/FleaMarket/ChangeContact/" + user.username+"&"+ contactInput.value,
+		  			 {
+		  			 method: "PATCH",
+		   			headers: {
+		  			 "Content-Length": 0
+		  			 },
+		  				 body: {}
+	  				 }
+	 				 ).then(p => {
+					   if (p.status == 200)
+		  			 {	
+					   user.contact = contactInput.value;
+			 		  const contact = this.container.querySelector(".user3");
+			   		 
+			   		  contact.innerHTML = "Contact: "+user.contact;
+					   }	
+		   else
+		   {
+			   console.log("Error");
+		   }
+		   });
+		 }
 		 }
 
 
@@ -147,17 +238,38 @@ export class Profile {
 		 moneyLabel.innerHTML = "Amount: ";
 		 row5.appendChild(moneyLabel);
 		 
-		 const moneyInput = document.createElement("input");
+		 const moneyInput = document.createElement("div");
+		 //moneyInput.type = "number";
+		 moneyInput.className = "ui right labeled input";
+		 const lab = document.createElement("label");
+		 lab.className = "ui label";
+		 lab.innerHTML = "$";
+		 moneyInput.appendChild(lab);
+		 const inp = document.createElement("input");
+		 inp.type= "text";
+		 inp.placeholder = "Amount";
+		 moneyInput.appendChild(inp);
+		 const div = document.createElement("div");
+		 div.className = "ui basic label";
+		 div.innerHTML = ".00";
+		 moneyInput.appendChild(div);
+		 
 		 row5.appendChild(moneyInput);
 
 		 const buttMoney = document.createElement("button");
 		 buttMoney.innerHTML = "Pay in";
-		 buttMoney.className = "buttPass2";
+		 buttMoney.className = "ui green button";
+		 
 		 rightDiv.appendChild(buttMoney);
 
 		 buttMoney.onclick = ()=>{
+			
+			 if(inp.value=="")
+			 	alert("Input an amount");
+			else
+			{
 			fetch(
-				"https://localhost:7085/FleaMarket/GiveMeMoney/" + user.username+"&"+ parseInt(moneyInput.value),
+				"https://localhost:7085/FleaMarket/GiveMeMoney/" + user.username+"&"+ parseInt(inp.value),
 				{
 				method: "PUT",
 				headers: {
@@ -167,13 +279,21 @@ export class Profile {
 			}
 			).then(p => {
 				if (p.status == 200)
-					alert("top");
+				{	
+					user.money+=parseInt(inp.value);
+					const money = this.container.querySelector(".user5");
+					console.log(money);
+					money.innerHTML = "Money: "+user.money+" $";
+				}	
 				else
 				{
 					console.log("Error");
 				}
 				});
 		 }
+		}
+		 }
+		}
+	
 
-	}
-}
+
