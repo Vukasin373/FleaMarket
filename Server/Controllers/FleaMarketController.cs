@@ -56,7 +56,7 @@ namespace Server.Controllers
         [Route("CreateNotification/{id}")]
         public IActionResult CreateNotification([FromBody] Notification notif, string id)
         {
-            if (data.CreateNotification(notif, id))
+            if (data.CreateBarterNotification(notif, id))
                 return Ok();
             return BadRequest();
         }
@@ -155,7 +155,7 @@ namespace Server.Controllers
         [Route("BarterAnswer/{id}&{answer}&{ownerUsername}")]
         public IActionResult BarterAnswer(string id, bool answer, string ownerUsername)
         {
-            return data.BarterAnswer(id, answer, ownerUsername);
+            return Ok(data.BarterAnswer(id, answer, ownerUsername));
 
         }
     }

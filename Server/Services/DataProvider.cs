@@ -96,15 +96,19 @@ namespace Server.Services
 
         }
 
-        internal bool CreateNotification(Notification notif, string id)
+        internal bool CreateBarterNotification(Notification notif, string id)
         {
             var collectionUser = Session.GetCollection<User>("Users");
 
             var collectionNotification = Session.GetCollection<Notification>("Notifications");
 
-            var user = collectionUser.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
+            var seller = collectionUser.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
 
-            if (user.Money < notif.Price)
+            var buyer = collectionUser.Find(x => x.Username == notif.Username).FirstOrDefault();
+
+            Console.WriteLine(buyer.Username);
+
+            if (buyer.Money < notif.Price)
                 return false;
 
             Notification notification = new Notification
@@ -120,14 +124,14 @@ namespace Server.Services
 
             collectionNotification.InsertOne(notification);
 
-            user.Notifications.Add(notification._id);
+            seller.Notifications.Add(notification._id);
 
-            var filter = Builders<User>.Filter.Eq("_id", user._id);
-            var update = Builders<User>.Update.Set("Notifications", user.Notifications);
+            var filter = Builders<User>.Filter.Eq("_id", seller._id);
+            var update = Builders<User>.Update.Set("Notifications", seller.Notifications);
             collectionUser.UpdateOne(filter, update);
 
-            var filter2 = Builders<User>.Filter.Eq("_id", user._id);
-            var update2 = Builders<User>.Update.Set("Money", user.Money - notification.Price);
+            var filter2 = Builders<User>.Filter.Eq("_id", buyer._id);
+            var update2 = Builders<User>.Update.Set("Money", buyer.Money - notification.Price);
             collectionUser.UpdateOne(filter2, update2);
 
             return true;
@@ -155,9 +159,9 @@ namespace Server.Services
             var collectionNotification = Session.GetCollection<Notification>("Notifications");
             List<Notification> notifications = new List<Notification>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = notifications.Count - 1; i > notifications.Count - 11; i--)
             {
-                if (user.Notifications.Count <= i)
+                if (i < 0)
                     break;
                 var notif = collectionNotification.Find<Notification>(x => x._id == user.Notifications[i]).FirstOrDefault<Notification>();
                 notifications.Add(notif);
@@ -180,7 +184,7 @@ namespace Server.Services
         {
             var collectionNotification = Session.GetCollection<Notification>("Notifications");
             var notif = collectionNotification.Find<Notification>(x => x._id == ObjectId.Parse(id)).FirstOrDefault<Notification>();
-
+            Console.WriteLine(notif);
             var collectionUser = Session.GetCollection<User>("Users");
 
             var buyer = collectionUser.Find(x => x.Username == notif.Username).FirstOrDefault();
@@ -233,6 +237,24 @@ namespace Server.Services
 
             collectionNotification.DeleteOne(Builders<Notification>.Filter.Eq("_id", notif._id));
             return true;
+        }
+
+        private void CreateNotification(Notification n, string v)
+        {
+            var collectionUser = Session.GetCollection<User>("Users");
+
+            var collectionNotification = Session.GetCollection<Notification>("Notifications");
+
+            var receiver = collectionUser.Find(x => x._id == ObjectId.Parse(v)).FirstOrDefault();
+
+
+            collectionNotification.InsertOne(n);
+
+            receiver.Notifications.Add(n._id);
+
+            var filter = Builders<User>.Filter.Eq("_id", receiver._id);
+            var update = Builders<User>.Update.Set("Notifications", receiver.Notifications);
+            collectionUser.UpdateOne(filter, update);
         }
 
         internal bool GiveMeMoney(string username, int cash)
