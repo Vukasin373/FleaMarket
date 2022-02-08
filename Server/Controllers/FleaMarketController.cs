@@ -37,6 +37,7 @@ namespace Server.Controllers
         [Route("Register")]
         public IActionResult Register([FromBody] User user)
         {
+            Console.WriteLine(user.ToJson());
             var a = data.Register(user);
             if (a != null)
                 return Ok(a);
