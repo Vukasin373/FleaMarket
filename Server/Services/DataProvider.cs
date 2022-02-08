@@ -35,8 +35,7 @@ namespace Server.Services
                     LastName = user.LastName,
                     City = user.City,
                     Contact = user.Contact,
-                    Money = user.Money,
-
+                    Money = user.Money
                 };
 
                 collection.InsertOne(r);
@@ -79,7 +78,6 @@ namespace Server.Services
                 Name = product.Name,
                 Price = product.Price,
                 User = user._id,
-                _id = p._id
             };
 
 
@@ -123,31 +121,31 @@ namespace Server.Services
             return true;
         }
 
-        internal List<ProductView> GetSearchResults(string tag, int page, int minPrice, int maxPrice, bool asc)
-        {
-            var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
-            var collectionProduct = Session.GetCollection<Product>("Products");
-            IOrderedQueryable result;
-            if (asc)
-            {
-                result = (from product in collectionProduct.AsQueryable()
-                              where product.Price >= minPrice &&
-                              product.Price <= maxPrice &&
-                              product.Tags.Contains(tag)
-                              orderby product.Price ascending
-                              select product);
-            }
-            else
-            {
-                result = (from product in collectionProduct.AsQueryable()
-                              where product.Price >= minPrice &&
-                              product.Price <= maxPrice &&
-                              product.Tags.Contains(tag)
-                              orderby product.Price descending select product);
-            }
+        //internal List<ProductView> GetSearchResults(string tag, int page, int minPrice, int maxPrice, bool asc)
+        //{
+        //    var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
+        //    var collectionProduct = Session.GetCollection<Product>("Products");
+        //    IOrderedQueryable result;
+        //    if (asc)
+        //    {
+        //        result = (from product in collectionProduct.AsQueryable()
+        //                      where product.Price >= minPrice &&
+        //                      product.Price <= maxPrice &&
+        //                      product.Tags.Contains(tag)
+        //                      orderby product.Price ascending
+        //                      select product);
+        //    }
+        //    else
+        //    {
+        //        result = (from product in collectionProduct.AsQueryable()
+        //                      where product.Price >= minPrice &&
+        //                      product.Price <= maxPrice &&
+        //                      product.Tags.Contains(tag)
+        //                      orderby product.Price descending select product);
+        //    }
+
             
-            result.
-        }
+        //}
 
         internal bool ChangeContact(string username, string contact)
         {

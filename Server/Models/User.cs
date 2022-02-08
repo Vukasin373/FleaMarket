@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 
 
@@ -11,7 +12,7 @@ namespace Server.Models
 
     public class User
     {
-        public ObjectId? _id { get; set; }
+        public ObjectId _id { get; set; }
         public string? Username { get; set; }
         public string? Password { get; set; }
         public string? FirstName { get; set; }
@@ -26,7 +27,6 @@ namespace Server.Models
         {
             Notifications = new List<Notification>();
             Products = new List<ObjectId>();
-            _id = ObjectId.GenerateNewId();
         }
 
     }

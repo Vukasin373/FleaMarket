@@ -15,6 +15,11 @@ namespace Server.Models
         public string? Name { get; set; }
         public int Price { get; set; }
         public ObjectId? User { get; set; }
+        public List<string> Tags { get; set; }
+        public ProductView()
+        {
+            Tags = new List<string>();
+        }
 
     }
 }

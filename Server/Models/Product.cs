@@ -25,7 +25,6 @@ namespace Server.Models
         {
             Tags = new List<string>();
             CustomAttributes = new List<CustomAttribute>();
-            _id = ObjectId.GenerateNewId();
         }
     }
 }
