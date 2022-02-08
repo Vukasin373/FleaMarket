@@ -27,8 +27,7 @@ export class MyProducts {
 		});
 	}
 
-	drawProductView(host, product)
-	{
+	drawProductView(host, product) {
 		const element = document.createElement("div");
 		element.className = "item3";
 		host.appendChild(element);
