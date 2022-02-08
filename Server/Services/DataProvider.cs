@@ -123,6 +123,20 @@ namespace Server.Services
             return true;
         }
 
+        internal List<ProductView> GetSearchResults(string tag, int page, int minPrice, int maxPrice, bool asc)
+        {
+            var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
+            var collectionProduct = Session.GetCollection<Product>("Products");
+
+            var result = (from product in collectionProduct.AsQueryable()
+                          where product.Price > minPrice &&
+                          product.Price < maxPrice && 
+                          product.Tags.Contains(tag)
+                          orderby product.Price descending select product);
+            
+            MessageBox.Show("Prvi radnik po opadajucem redosledu po prezimenu koji ima platu vecu od 20000: " + result2.ime + " " + result2
+        }
+
         internal bool ChangeContact(string username, string contact)
         {
             var collectionUser = Session.GetCollection<User>("Users");
