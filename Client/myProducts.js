@@ -1,4 +1,4 @@
-import { ProductView } from "./Entities/ProductView";
+import { ProductView } from "./Entities/ProductView.js";
 
 export class MyProducts {
 	constructor() {
@@ -27,8 +27,7 @@ export class MyProducts {
 		// });
 	}
 
-	drawProductView(host, product)
-	{
+	drawProductView(host, product) {
 		const element = document.createElement("div");
 		element.className = "item3";
 		host.appendChild(element);
