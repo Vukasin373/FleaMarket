@@ -70,7 +70,6 @@ namespace Server.Services
                 Name = product.Name,
                 Tags = product.Tags,
                 CustomAttributes = product.CustomAttributes
-
             };
 
             ProductView pv = new ProductView
@@ -78,6 +77,7 @@ namespace Server.Services
                 Name = product.Name,
                 Price = product.Price,
                 User = user._id,
+                Tags = product.Tags
             };
 
 
@@ -121,31 +121,31 @@ namespace Server.Services
             return true;
         }
 
-        //internal List<ProductView> GetSearchResults(string tag, int page, int minPrice, int maxPrice, bool asc)
-        //{
-        //    var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
-        //    var collectionProduct = Session.GetCollection<Product>("Products");
-        //    IOrderedQueryable result;
-        //    if (asc)
-        //    {
-        //        result = (from product in collectionProduct.AsQueryable()
-        //                      where product.Price >= minPrice &&
-        //                      product.Price <= maxPrice &&
-        //                      product.Tags.Contains(tag)
-        //                      orderby product.Price ascending
-        //                      select product);
-        //    }
-        //    else
-        //    {
-        //        result = (from product in collectionProduct.AsQueryable()
-        //                      where product.Price >= minPrice &&
-        //                      product.Price <= maxPrice &&
-        //                      product.Tags.Contains(tag)
-        //                      orderby product.Price descending select product);
-        //    }
-
-            
-        //}
+        internal List<ProductView> GetSearchResults(string tag, int page, int minPrice, int maxPrice, bool asc)
+        {
+            var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
+            var collectionProduct = Session.GetCollection<Product>("Products");
+            List<ProductView> result;
+            if (asc)
+            {
+                result = (from productView in collectionProductView.AsQueryable()
+                          where productView.Price >= minPrice &&
+                          productView.Price <= maxPrice &&
+                          productView.Tags.Contains(tag)
+                          orderby productView.Price ascending
+                          select productView).Skip<ProductView>((page - 1) * 10).SkipLast<ProductView>(page * 10).ToList<ProductView>();
+            }
+            else
+            {
+                result = (from productView in collectionProductView.AsQueryable()
+                          where productView.Price >= minPrice &&
+                          productView.Price <= maxPrice &&
+                          productView.Tags.Contains(tag)
+                          orderby productView.Price descending
+                          select productView).Skip<ProductView>((page - 1) * 10).SkipLast<ProductView>(page * 10).ToList<ProductView>();
+            }
+            return result;
+        }
 
         internal bool ChangeContact(string username, string contact)
         {
