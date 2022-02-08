@@ -2,12 +2,13 @@ import { Profile } from "./profile.js";
 import { MyProducts } from "./myProducts.js";
 import { BuyProducts } from "./buyProducts.js";
 import { NotificationsAndBarter } from "./notificationsAndBarter.js";
+import { User } from "./Entities/User.js";
 
 export class Hub {
 	constructor() {
 		this.container = null;
 		this.username = null;
-		this.user = null;
+		this.user = new User("620242b26254433b185fe316","vule","vule","v","last","063","vr",50);
 		this.current = null;
 	}
 
@@ -25,6 +26,7 @@ export class Hub {
 		this.container.appendChild(hubBottom);
 
 		let profile = new Profile();
+
 		let myProducts = new MyProducts();
 		let buyProducts = new BuyProducts();
 		let notificationsAndBarter = new NotificationsAndBarter();
@@ -33,6 +35,6 @@ export class Hub {
 		//     rightDiv3.removeChild(rightDiv3.lastChild);
 		// }
 
-		profile.draw(hubBottom);
+		profile.draw(hubBottom, this.user);
 	}
 }

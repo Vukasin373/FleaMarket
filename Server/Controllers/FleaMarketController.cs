@@ -118,7 +118,7 @@ namespace Server.Controllers
             else return BadRequest();
         }
 
-        [HttpPatch]
+        [HttpPut]
         [Route("GiveMeMoney/{username}&{Cash}")]
         public IActionResult GiveMeMoney(string username, int Cash)
         {
