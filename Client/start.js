@@ -73,11 +73,10 @@ export class Start {
 		LoginButton.innerHTML = "Confirm";
 		loginform.appendChild(LoginButton);
 
-		//hardkodirani login, obrisati u finalnoj verziji
-		loginUsernameInput.value == "aca";
-		loginPasswordInput.value == "aca";
-
 		LoginButton.onclick = () => {
+			//hardkodirani login, obrisati u finalnoj verziji
+			loginUsernameInput.value = "aca";
+			loginPasswordInput.value = "aca";
 			if (loginUsernameInput.value == "" || loginPasswordInput.value == "") {
 				alert("input Login info.");
 				return;
@@ -216,5 +215,49 @@ export class Start {
 		RegisterButton.className = "ui green button";
 		RegisterButton.innerHTML = "Confirm";
 		registerform.appendChild(RegisterButton);
+		RegisterButton.onclick = () => {
+			if (
+				registerUsernameInput.value == "" ||
+				registerPasswordInput.value == "" ||
+				registerInput2.value == "" ||
+				registerInput3.value == "" ||
+				registerInput4.value == ""
+			) {
+				alert("input Login info.");
+				return;
+			}
+			fetch(`https://localhost:7085/FleaMarket/Register`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					username: registerUsernameInput,
+					password: registerPasswordInput,
+					firstName: registerInput1,
+					lastName: registerInput2,
+					city: registerInput4,
+					contact: registerInput3,
+					money: 0,
+				}),
+			}).then((p) => {
+				console.log(p);
+				if (p.ok)
+					p.json().then((a) => {
+						const profile = new User(
+							a._id,
+							a.username,
+							a.password,
+							a.firstName,
+							a.lastName,
+							a.contact,
+							a.city,
+							a.money
+						);
+						const hub = new Hub(profile);
+						document.body.removeChild(this.container);
+						hub.draw(host);
+					});
+				else alert("Invalid Sign in");
+			});
+		};
 	}
 }
