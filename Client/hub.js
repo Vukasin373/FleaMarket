@@ -6,7 +6,6 @@ import { NotificationsAndBarter } from "./notificationsAndBarter.js";
 export class Hub {
 	constructor(user) {
 		this.container = null;
-		this.username = null;
 		this.user = user;
 		this.current = null;
 	}
