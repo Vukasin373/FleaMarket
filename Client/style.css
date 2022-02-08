@@ -1,3 +1,41 @@
+body {
+	background-color: rgba(162, 239, 134, 0.84) !important;
+}
+
+.banner1 {
+	height: auto;
+	width: 500px;
+	margin: 30px;
+}
+
+.login1 {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	margin: 30px !important;
+}
+
+.left1 {
+	display: flex;
+	flex-direction: column;
+}
+
+.register1 {
+	display: flex;
+	flex-direction: column;
+	margin: 50px;
+	justify-content: end;
+	width: 500px;
+}
+
+.registerForm1 {
+}
+
+.main1 {
+	display: flex;
+	justify-content: space-around;
+}
+
 .HubMain {
 	display: flex;
 	flex-direction: column;
