@@ -78,7 +78,8 @@ namespace Server.Services
                 Name = product.Name,
                 Price = product.Price,
                 User = user._id,
-                Tags = product.Tags
+                Tags = product.Tags,
+                ImgUrl = product.ImgUrl
             };
 
 
