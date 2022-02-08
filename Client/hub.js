@@ -33,7 +33,7 @@ export class Hub {
 		//     rightDiv3.removeChild(rightDiv3.lastChild);
 		// }
 
-		profile.draw(hubBottom);
+		//profile.draw(hubBottom);
 
 		myProducts.draw(hubBottom);
 	}
