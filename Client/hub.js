@@ -30,7 +30,7 @@ export class Hub {
 			this.currentButton = profileButton;
 			profileButton.classList.add("active");
 
-			this.container.removeChild(this.currentPage.firstChild);
+			this.currentPage.removeChild(this.currentPage.firstChild);
 			let profile = new Profile();
 			profile.draw(this.currentPage);
 		};
@@ -44,7 +44,7 @@ export class Hub {
 			this.currentButton = myProductsButton;
 			myProductsButton.classList.add("active");
 
-			this.container.removeChild(this.currentPage.firstChild);
+			this.currentPage.removeChild(this.currentPage.firstChild);
 			let myProducts = new MyProducts();
 			myProducts.draw(this.currentPage);
 		};
@@ -58,7 +58,7 @@ export class Hub {
 			this.currentButton = buyProductsButton;
 			buyProductsButton.classList.add("active");
 
-			this.container.removeChild(this.currentPage.firstChild);
+			this.currentPage.removeChild(this.currentPage.firstChild);
 			let buyProducts = new BuyProducts();
 			buyProducts.draw(this.currentPage);
 		};
@@ -73,7 +73,7 @@ export class Hub {
 			this.currentButton = notifButton;
 			notifButton.classList.add("active");
 
-			this.container.removeChild(this.currentPage.firstChild);
+			this.currentPage.removeChild(this.currentPage.firstChild);
 			let notificationsAndBarter = new NotificationsAndBarter();
 			notificationsAndBarter.draw(this.currentPage);
 		};
