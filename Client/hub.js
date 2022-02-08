@@ -4,10 +4,10 @@ import { BuyProducts } from "./buyProducts.js";
 import { NotificationsAndBarter } from "./notificationsAndBarter.js";
 
 export class Hub {
-	constructor() {
+	constructor(user) {
 		this.container = null;
 		this.username = null;
-		this.user = null;
+		this.user = user;
 		this.current = null;
 	}
 

@@ -1,4 +1,5 @@
 import { Hub } from "./hub.js";
+import { User } from "./Entities/user.js";
 
 export class Start {
 	constructor() {
@@ -71,6 +72,11 @@ export class Start {
 		LoginButton.className = "ui green button";
 		LoginButton.innerHTML = "Confirm";
 		loginform.appendChild(LoginButton);
+
+		//hardkodirani login, obrisati u finalnoj verziji
+		loginUsernameInput.value == "aca";
+		loginPasswordInput.value == "aca";
+
 		LoginButton.onclick = () => {
 			if (loginUsernameInput.value == "" || loginPasswordInput.value == "") {
 				alert("input Login info.");
@@ -83,14 +89,24 @@ export class Start {
 					headers: { "Content-Type": "application/json" },
 				}
 			).then((p) => {
-				p.json().then((a) => {
-					console.log(a);
-					// if (a) {
-					// 	document.body.removeChild(this.container);
-					// 	let u = new UserView(this, input1.value);
-					// 	u.draw();
-					// } else alert("Wrong password.");
-				});
+				if (p.ok)
+					p.json().then((a) => {
+						console.log(a);
+						const profile = new User(
+							a._id,
+							a.username,
+							a.password,
+							a.firstName,
+							a.lastName,
+							a.contact,
+							a.city,
+							a.money
+						);
+						const hub = new Hub(profile);
+						document.body.removeChild(this.container);
+						hub.draw(host);
+					});
+				else alert("Invalid Sign in");
 			});
 		};
 
