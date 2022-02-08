@@ -36,7 +36,7 @@ namespace Server.Services
                     LastName = user.LastName,
                     City = user.City,
                     Contact = user.Contact,
-                    Money = user.Money
+                    Money = 0
                 };
 
                 collection.InsertOne(r);
