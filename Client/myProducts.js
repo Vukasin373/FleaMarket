@@ -1,4 +1,4 @@
-import { ProductView } from "./Entities/ProductView";
+import { ProductView } from "./Entities/ProductView.js";
 
 export class MyProducts {
 	constructor() {
@@ -7,24 +7,24 @@ export class MyProducts {
 
 	draw(host) {
 		this.container = document.createElement("div");
-		this.container.className = "MyProducts";
+		this.container.className = "MyProducts3";
 		host.appendChild(this.container);
 
 		const list = document.createElement("div");
 		list.className = "ui relaxed list";
 		this.container.appendChild(list);
 
-		// pribavi produkte
-		// fetch(
-		// 	"https://localhost:7085/FleaMarket/GetMyProducts/aca&1"
-		// ).then((p) => {
-		// 	p.json().then((product) => {
-		// 		product.forEach((p) => {
-		// 			const product = new ProductView(p.id, p.name, p.price, p.user, p.tags, p.img);
-		// 			this.drawProductView(host, product);
-		// 		});
-		// 	});
-		// });
+		//pribavi produkte
+		fetch(
+			"https://localhost:7085/FleaMarket/GetMyProducts/aca&1"
+		).then((p) => {
+			p.json().then((product) => {
+				product.forEach((p) => {
+					const product = new ProductView(p.id, p.name, p.price, p.user, p.tags, p.img);
+					this.drawProductView(host, product);
+				});
+			});
+		});
 	}
 
 	drawProductView(host, product)
@@ -51,7 +51,7 @@ export class MyProducts {
 		contentTop.appendChild(contentTopLeft);
 
 		const name = document.createElement("div");
-		name.innerHTML = product.name;
+		name.innerHTML = product.name
 		name.className = "name3";
 		contentTopLeft.appendChild(name);
 
