@@ -1,3 +1,4 @@
+import { ProductView } from "./Entities/ProductView";
 
 export class MyProducts {
 	constructor() {
@@ -15,35 +16,18 @@ export class MyProducts {
 
 		// pribavi produkte
 		// fetch(
-		// 	`https://localhost:7294/Business/Review/${this.username}&${this.businessName}`,
-		// 	{
-		// 		method: "POST",
-		// 		headers: { "Content-Type": "application/json" },
-		// 		body: JSON.stringify({
-		// 			review: inputReview.value,
-		// 			rating: rating,
-		// 			name: this.username,
-		// 		}),
-		// 	}
-		// )
-		// 	.then((p) => {
-		// 		if (p.ok) {
-		// 			const rightDiv3 = document.body.querySelector(".rightDiv3");
-		// 			while (rightDiv3.firstChild) {
-		// 				rightDiv3.removeChild(rightDiv3.lastChild);
-		// 			}
-		// 			this.drawRightDiv(rightDiv3);
-		// 		}
-		// 	})
-		// 	.finally();
-
-		for (let i = 0; i < 10; i ++)
-		{
-			this.drawProductView(list);
-		}
+		// 	"https://localhost:7085/FleaMarket/GetMyProducts/aca&1"
+		// ).then((p) => {
+		// 	p.json().then((product) => {
+		// 		product.forEach((p) => {
+		// 			const product = new ProductView(p.id, p.name, p.price, p.user, p.tags, p.img);
+		// 			this.drawProductView(host, product);
+		// 		});
+		// 	});
+		// });
 	}
 
-	drawProductView(host)
+	drawProductView(host, product)
 	{
 		const element = document.createElement("div");
 		element.className = "item3";
@@ -67,12 +51,12 @@ export class MyProducts {
 		contentTop.appendChild(contentTopLeft);
 
 		const name = document.createElement("div");
-		name.innerHTML = "name3name3name3name3name3";
+		name.innerHTML = product.name;
 		name.className = "name3";
 		contentTopLeft.appendChild(name);
 
 		const price = document.createElement("div");
-		price.innerHTML = "price";
+		price.innerHTML = product.price;
 		contentTopLeft.appendChild(price);
 
 		const contentTopRight = document.createElement("div");
