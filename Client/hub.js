@@ -34,5 +34,7 @@ export class Hub {
 		// }
 
 		profile.draw(hubBottom);
+
+		myProducts.draw(hubBottom);
 	}
 }
