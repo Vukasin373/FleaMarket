@@ -18,17 +18,22 @@ body {
 .left1 {
 	display: flex;
 	flex-direction: column;
-	border: solid rgb(145, 0, 0) 3px;
 }
 
 .register1 {
 	display: flex;
 	flex-direction: column;
-	border: solid blue 3px;
+	margin: 50px;
+	justify-content: end;
+	width: 500px;
+}
+
+.registerForm1 {
 }
 
 .main1 {
 	display: flex;
+	justify-content: space-around;
 }
 
 .HubMain {
