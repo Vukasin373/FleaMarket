@@ -127,14 +127,26 @@ namespace Server.Services
         {
             var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
             var collectionProduct = Session.GetCollection<Product>("Products");
-
-            var result = (from product in collectionProduct.AsQueryable()
-                          where product.Price > minPrice &&
-                          product.Price < maxPrice && 
-                          product.Tags.Contains(tag)
-                          orderby product.Price descending select product);
+            IOrderedQueryable result;
+            if (asc)
+            {
+                result = (from product in collectionProduct.AsQueryable()
+                              where product.Price >= minPrice &&
+                              product.Price <= maxPrice &&
+                              product.Tags.Contains(tag)
+                              orderby product.Price ascending
+                              select product);
+            }
+            else
+            {
+                result = (from product in collectionProduct.AsQueryable()
+                              where product.Price >= minPrice &&
+                              product.Price <= maxPrice &&
+                              product.Tags.Contains(tag)
+                              orderby product.Price descending select product);
+            }
             
-            MessageBox.Show("Prvi radnik po opadajucem redosledu po prezimenu koji ima platu vecu od 20000: " + result2.ime + " " + result2
+            result.
         }
 
         internal bool ChangeContact(string username, string contact)
