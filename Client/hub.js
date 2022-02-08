@@ -5,10 +5,10 @@ import { NotificationsAndBarter } from "./notificationsAndBarter.js";
 import { User } from "./Entities/User.js";
 
 export class Hub {
-	constructor() {
+	constructor(user) {
 		this.container = null;
 		this.username = null;
-		this.user = new User("620242b26254433b185fe316","vule","vule","v","last","063","vr",50);
+		this.user = user;
 		this.current = null;
 	}
 
