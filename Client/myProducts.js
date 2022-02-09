@@ -20,7 +20,7 @@ export class MyProducts {
 		).then((p) => {
 			p.json().then((product) => {
 				product.forEach((p) => {
-					const product = new ProductView(p.id, p.name, p.price, p.user, p.tags, p.img);
+					const product = new ProductView(p._id, p.name, p.price, p.user, p.tags, p.imgUrl);
 					this.drawProductView(this.container, product);
 				});
 			});
@@ -30,6 +30,7 @@ export class MyProducts {
 	drawProductView(host, product) {
 		const element = document.createElement("div");
 		element.className = "item3";
+		element.id = product.id;
 		host.appendChild(element);
 
 		const image = document.createElement("img");
@@ -71,6 +72,23 @@ export class MyProducts {
 		trashIcon.className = "trash icon";
 		deleteButton.appendChild(trashIcon);
 
+		
+
+		deleteButton.onclick = () => {
+			// fetch(
+			// 	`https://localhost:7085/FleaMarket/DeleteProduct/${product.id}`,
+			// 	{
+			// 		method: "DELETE",
+			// 		headers: { "Content-Type": "application/json" },
+			// 	}
+			// ).then((p) => {
+			// 	host.removeChild(mainDiv);
+			// });
+			//this.container.querySelector("");
+			console.log(product.id.toHexString());
+
+		};
+
 		const contentBottom = document.createElement("div");
 		contentBottom.className = "contentBottom3";
 		content.appendChild(contentBottom);
@@ -84,7 +102,5 @@ export class MyProducts {
 		icon.className = "right chevron icon";
 		button.appendChild(icon);
 
-		const line = document.createElement("h");
-		element.appendChild(line);
 	}
 }
