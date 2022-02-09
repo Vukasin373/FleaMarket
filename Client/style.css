@@ -132,15 +132,29 @@ body {
 }
 
 .img2 {
+	width: 100%;
+
+	margin-right: 50px;
 	
 }
 
-.partRigth2 {
+.partRight2 {
 	display: flex;
 	flex-direction: column;
+	margin-top: 10px;
+	margin-left: 80px;
 }
 
 .rightFirstDiv2 {
 	display: flex;
 	flex-direction: column;
+}
+
+.barterDiv2 {
+	display: flex;
+	margin-top: 20px;
+}
+
+.fontSize {
+	font-size: 20px;
 }

@@ -1,4 +1,5 @@
 import { ProductView } from "./Entities/ProductView.js";
+import {Product } from "./Entities/Product.js";
 
 export class BuyProducts {
 	constructor(user) {
@@ -88,6 +89,9 @@ export class BuyProducts {
 
 
 		findBut.onclick = () => {
+			while (rightDiv.firstChild) {
+				rightDiv.removeChild(rightDiv.lastChild);
+			}
 			this.pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, 1);
 			}
 	}
@@ -119,16 +123,17 @@ export class BuyProducts {
 							p,
 							products[p].name,
 							products[p].price,
-							products[p].user,
+							products[p].username,
 							products[p].tags,
-							products[p].imgUrl
+							products[p].imgUrl,
+							products[p].product
 						);
 						this.drawProductViewForBuy(productsDiv, product);
 						br++;
-						
+					
 						
 			};
-					if(br==0)
+					if(br==0 && page==1)
 					{
 						alert ("No results");
 					}
@@ -142,11 +147,11 @@ export class BuyProducts {
 					prevButton.className = "ui green button buttonPage";
 					prevButton.innerHTML = "Previous";
 
-					if(br == 3 && page == 1)
+					if(br == 5 && page == 1)
 					{
 						productsDiv.appendChild(nextButton);
 					}
-					else if(br == 3 && page > 1)
+					else if(br == 5 && page > 1)
 					{
 						let rowButtons = document.createElement("div");
 						rowButtons.appendChild(prevButton);
@@ -154,15 +159,23 @@ export class BuyProducts {
 
 						productsDiv.appendChild(rowButtons);
 					}
-					else if(br < 3 && page > 1)
+					else if(br < 5 && page > 1)
 					{
 						productsDiv.appendChild(prevButton);
 					}
 
 					nextButton.onclick = () => {
+						const rightDiv = this.container.querySelector(".partRight2")
+						while (rightDiv.firstChild) {
+							rightDiv.removeChild(rightDiv.lastChild);
+						}
 						this.pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, page + 1)
 					}
 					prevButton.onclick = () => {
+						const rightDiv = this.container.querySelector(".partRight2")
+						while (rightDiv.firstChild) {
+							rightDiv.removeChild(rightDiv.lastChild);
+						}
 						this.pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, page - 1)
 					}
 				}
@@ -179,7 +192,8 @@ export class BuyProducts {
 
 		const image = document.createElement("img");
 		image.className = "image img3";
-		image.src = "./image.png";
+		console.log(product.img);
+		image.src = "https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278__340.jpg";
 		element.appendChild(image);
 
 		const content = document.createElement("content");
@@ -200,7 +214,7 @@ export class BuyProducts {
 		contentTopLeft.appendChild(name);
 
 		const price = document.createElement("div");
-		price.innerHTML = product.price;
+		price.innerHTML = product.price + " $";
 		contentTopLeft.appendChild(price);
 
 
@@ -233,9 +247,11 @@ export class BuyProducts {
 			}
 
 			fetch(
-				"https://localhost:7085/FleaMarket/GetProductDetails/" + productView.id)
+				"https://localhost:7085/FleaMarket/GetProductDetails/" + productView.product)
 				.then(p => {
+					
 					p.json().then(productJson => {
+					
 							const product = new Product(
 								productJson.id,
 								productJson.name,
@@ -245,22 +261,28 @@ export class BuyProducts {
 								productJson.img,
 								productJson.description
 							);
-							this.drawProduct(rightDiv, product);
-							
-							
+								console.log(productView);
+							fetch(
+								"https://localhost:7085/FleaMarket/GetUserDetails/" + productView.username)
+								.then(q => {
+									q.json().then(userInfo => {
+							this.drawProduct(rightDiv, product, userInfo, productView.username, productView.id);
+									})
+								})
 							
 				});
 			});
 		}
 	
-		drawProduct(rightDiv, product)
+		drawProduct(rightDiv, product, userInfo, sellerUsername, idProduct)
 		{
 			const firstDiv = document.createElement("div");
 			firstDiv.className = "firstDiv2";
 			rightDiv.appendChild(firstDiv);
 
 			const img = document.createElement("img");
-			img.src = product.img;
+			
+			img.src = "https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278__340.jpg";
 			img.className = "img2";
 			firstDiv.appendChild(img);
 
@@ -273,16 +295,113 @@ export class BuyProducts {
 			rightFirstDiv.appendChild(nameH2);
 
 			const priceH2 = document.createElement("h2");
-			priceH2.innerHTML = "Price: "+product.price;
+			priceH2.innerHTML = "Price: "+product.price +"$";
 			rightFirstDiv.appendChild(priceH2);
 
 			const descriptionH2 = document.createElement("h2");
 			descriptionH2.innerHTML = "Description: "+product.description;
 			rightFirstDiv.appendChild(descriptionH2);
+			
+			
+			
+			product.customAttributes.forEach(element => {
+				let att = document.createElement("h2");
+				att.innerHTML = element.name + " : " + element.value;
+				rightDiv.appendChild(att);
+			});
 
+			const lab = document.createElement("h2");
+			lab.innerHTML = "Seller info:";
+			lab.style.marginTop  = "50px";
+			rightDiv.appendChild(lab);
+
+
+			const name = document.createElement("div");
+			rightDiv.appendChild(name);
+			name.className = "fontSize";
+			name.innerHTML = "Full name: " +userInfo[0] + " " +userInfo[1];
+
+			const city = document.createElement("div");
+			rightDiv.appendChild(city);
+			city.className = "fontSize";
+			city.innerHTML = "City: " +userInfo[2];
+
+			const contact = document.createElement("div");
+			rightDiv.appendChild(contact);
+			contact.className = "fontSize";
+			contact.innerHTML = "Phone number: " +userInfo[3];
 
 			
+			console.log(this.user.username, sellerUsername);
+			if(this.user.username != sellerUsername)
+			{
+
+			const barterDiv = document.createElement("div");
+			barterDiv.className = "barterDiv2";
+			barterDiv.style.alignSelf = "end";
+			rightDiv.appendChild(barterDiv);
+
+			const labBarter = document.createElement("h2");
+			labBarter.innerHTML = "Suggest price: ";
+			barterDiv.appendChild(labBarter);
+
+			const semanticBarter = document.createElement("div");
+			semanticBarter.className = "ui right labeled input";
+			barterDiv.appendChild(semanticBarter);
+		
+			const inpBarter = document.createElement("input");
+			semanticBarter.appendChild(inpBarter);
+			inpBarter.type = "number";
+			
+			const div =document.createElement("div");
+			div.className = "ui basic label";
+			div.innerHTML = "$";
+			semanticBarter.appendChild(div);
+			
+			
+			const buttBarter = document.createElement("button");
+			buttBarter.className = "ui green button";
+			buttBarter.innerHTML = "Begin barter";
+			barterDiv.appendChild(buttBarter);
+
+			buttBarter.onclick = () => {
+				let price =parseInt(inpBarter.value);
+
+				fetch(
+					"https://localhost:7085/FleaMarket/CheckNotification/" + sellerUsername +"&"+this.user.username+"&"+idProduct)
+					.then(q => {
+						if(q.status==400)
+						{
+							alert("Your offer is already sent !");
+						}
+						else if(q.status == 200)
+						{
+							fetch(`https://localhost:7085/FleaMarket/CreateNotification/`+sellerUsername, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					username: this.user.username,
+					firstName: this.user.firstName,
+					lastName: this.user.lastName,
+					productName: product.name,
+					productId: idProduct,
+					price: price ,
+					barter: true,
+				}),
+			}).then(p => {
+				if (p.ok)
+					alert("Your offer has been sent ");
+						})
+					}
+				else
+					console.log("Error");		
+		
+			})
+
+		
 		}
-}
+	}
+		}
+	}
 	
 

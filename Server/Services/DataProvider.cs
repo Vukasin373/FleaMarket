@@ -401,12 +401,12 @@ namespace Server.Services
 
         internal List<String> GetUserDetails(string id)
         {
-            ObjectId userId = ObjectId.Parse(id);
+            //ObjectId userId = ObjectId.Parse(id);
             var collectionUser = Session.GetCollection<User>("Users");
 
 
 
-            var user = collectionUser.Find(x => x._id == userId).FirstOrDefault();
+            var user = collectionUser.Find(x => x.Username == id).FirstOrDefault();
 
 
 
@@ -439,12 +439,12 @@ namespace Server.Services
             List<ProductView> list;
             if (asc)
             {
-                list = (from productView in collectionProductView.AsQueryable()
-                        where productView.Price >= minPrice &&
-                        productView.Price <= maxPrice &&
-                        productView.Tags.Contains(tag)
-                        orderby productView.Price ascending
-                        select productView).Skip<ProductView>((page - 1) * 3).Take<ProductView>(3).ToList<ProductView>();
+                 list = (from productView in collectionProductView.AsQueryable()
+                          where productView.Price >= minPrice &&
+                          productView.Price <= maxPrice &&
+                          productView.Tags.Contains(tag)
+                          orderby productView.Price ascending
+                          select productView).Skip<ProductView>((page - 1) * 5).Take<ProductView>(5).ToList<ProductView>();
             }
             else
             {
@@ -453,7 +453,7 @@ namespace Server.Services
                         productView.Price <= maxPrice &&
                         productView.Tags.Contains(tag)
                         orderby productView.Price descending
-                        select productView).Skip<ProductView>((page - 1) * 3).Take<ProductView>(3).ToList<ProductView>();
+                        select productView).Skip<ProductView>((page - 1) * 5).Take<ProductView>(5).ToList<ProductView>();
             }
 
             foreach (ProductView item in list)
@@ -621,6 +621,26 @@ namespace Server.Services
             var collection = Session.GetCollection<Product>("Products");
             Product product = collection.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
             return product;
+        }
+
+
+        internal bool CheckNotification(string usernameSeller, string usernameBuyer, string idProduct)
+        {
+            var collectionUser = Session.GetCollection<User>("Users");
+            var user = collectionUser.Find(x => x.Username == usernameSeller).FirstOrDefault();
+
+            var collectionNotification = Session.GetCollection<Notification>("Notifications");
+
+
+
+            for (int i = 0; i < user.Notifications.Count; i++)
+            {
+                var notif = collectionNotification.Find<Notification>(x => x._id == user.Notifications[i] && x.Username == usernameBuyer && x.ProductId == idProduct).FirstOrDefault<Notification>();
+                if(notif!=null)
+                    return false;
+            }
+            return true;
+
         }
     }
 }
