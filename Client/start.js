@@ -90,7 +90,6 @@ export class Start {
 			).then((p) => {
 				if (p.ok)
 					p.json().then((a) => {
-						console.log(a);
 						const profile = new User(
 							a._id,
 							a.username,

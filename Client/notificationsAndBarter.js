@@ -1,5 +1,7 @@
 export class NotificationsAndBarter {
-	constructor() {}
+	constructor(user) {
+		this.user = user;
+	}
 
 	draw(host) {
 		const d = document.createElement("div");

@@ -64,7 +64,7 @@ namespace Server.Controllers
 
         [HttpGet]
         [Route("GetMyProducts/{username}&{page}")]
-        public List<ProductView> GetMyProducts(string username, int page)
+        public Dictionary<string, ProductView> GetMyProducts(string username, int page)
         {
             return data.GetMyProducts(username, page);
 

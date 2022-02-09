@@ -579,11 +579,11 @@ namespace Server.Services
 
 
 
-        public List<ProductView> GetMyProducts(string username, int page)
+        public Dictionary<string, ProductView> GetMyProducts(string username, int page)
         {
             var collectionUser = Session.GetCollection<User>("Users");
             var user = collectionUser.Find(x => x.Username == username).FirstOrDefault();
-            List<ProductView> products = new List<ProductView>();
+            Dictionary<string, ProductView> dict = new Dictionary<string, ProductView>();
 
 
 
@@ -593,15 +593,12 @@ namespace Server.Services
             {
                 if (user.Products.Count <= i)
                     break;
-                products.Add(collectionProductView.Find(x => x._id == user.Products[i]).FirstOrDefault());
+                ProductView p = collectionProductView.Find(x => x._id == user.Products[i]).FirstOrDefault();
+                dict[p._id.ToString()] = p;
+            
             }
 
-
-
-            return products;
-
-
-
+            return dict;
         }
 
 
