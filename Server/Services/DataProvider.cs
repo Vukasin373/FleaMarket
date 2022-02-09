@@ -424,14 +424,15 @@ namespace Server.Services
 
 
 
-        internal List<ProductView> GetSearchResults(string tag, int page, int minPrice, int maxPrice, bool asc)
+        internal Dictionary<string, ProductView> GetSearchResults(string tag, int page, int minPrice, int maxPrice, bool asc)
         {
             var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
             var collectionProduct = Session.GetCollection<Product>("Products");
-            List<ProductView> result;
+            Dictionary<string, ProductView> result = new Dictionary<string, ProductView>();
+            List<ProductView> list;
             if (asc)
             {
-                result = (from productView in collectionProductView.AsQueryable()
+                 list = (from productView in collectionProductView.AsQueryable()
                           where productView.Price >= minPrice &&
                           productView.Price <= maxPrice &&
                           productView.Tags.Contains(tag)
@@ -440,12 +441,17 @@ namespace Server.Services
             }
             else
             {
-                result = (from productView in collectionProductView.AsQueryable()
+                list = (from productView in collectionProductView.AsQueryable()
                           where productView.Price >= minPrice &&
                           productView.Price <= maxPrice &&
                           productView.Tags.Contains(tag)
                           orderby productView.Price descending
                           select productView).Skip<ProductView>((page - 1) * 10).Take<ProductView>(10).ToList<ProductView>();
+            }
+
+            foreach (ProductView item in list)
+            {
+                result[item._id.ToString()] = item;
             }
             return result;
         }
@@ -579,11 +585,11 @@ namespace Server.Services
 
 
 
-        public List<ProductView> GetMyProducts(string username, int page)
+        public Dictionary<string, ProductView> GetMyProducts(string username, int page)
         {
             var collectionUser = Session.GetCollection<User>("Users");
             var user = collectionUser.Find(x => x.Username == username).FirstOrDefault();
-            List<ProductView> products = new List<ProductView>();
+            Dictionary<string, ProductView> dict = new Dictionary<string, ProductView>();
 
 
 
@@ -593,15 +599,12 @@ namespace Server.Services
             {
                 if (user.Products.Count <= i)
                     break;
-                products.Add(collectionProductView.Find(x => x._id == user.Products[i]).FirstOrDefault());
+                ProductView p = collectionProductView.Find(x => x._id == user.Products[i]).FirstOrDefault();
+                dict[p._id.ToString()] = p;
+            
             }
 
-
-
-            return products;
-
-
-
+            return dict;
         }
 
 

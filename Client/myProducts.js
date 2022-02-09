@@ -15,14 +15,32 @@ export class MyProducts {
 		this.container.appendChild(list);
 
 		//pribavi produkte
-		fetch(
-			"https://localhost:7085/FleaMarket/GetMyProducts/aca&1"
-		).then((p) => {
-			p.json().then((product) => {
-				product.forEach((p) => {
-					const product = new ProductView(p._id, p.name, p.price, p.user, p.tags, p.imgUrl);
+		fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&1").then((p) => {
+			p.json().then((products) => {
+				for (var p in products) {
+					//console.log(name, product[name]);
+					const product = new ProductView(
+						products[p]._id,
+						products[p].name,
+						products[p].price,
+						products[p].user,
+						products[p].tags,
+						products[p].imgUrl
+					);
 					this.drawProductView(this.container, product);
-				});
+				}
+
+				// product.forEach((p) => {
+				// 	const product = new ProductView(
+				// 		p._id,
+				// 		p.name,
+				// 		p.price,
+				// 		p.user,
+				// 		p.tags,
+				// 		p.imgUrl
+				// 	);
+				// 	this.drawProductView(this.container, product);
+				// });
 			});
 		}).finally
 			{
@@ -61,7 +79,7 @@ export class MyProducts {
 		contentTop.appendChild(contentTopLeft);
 
 		const name = document.createElement("div");
-		name.innerHTML = product.name
+		name.innerHTML = product.name;
 		name.className = "name3";
 		contentTopLeft.appendChild(name);
 
@@ -81,8 +99,6 @@ export class MyProducts {
 		const trashIcon = document.createElement("i");
 		trashIcon.className = "trash icon";
 		deleteButton.appendChild(trashIcon);
-
-		
 
 		deleteButton.onclick = () => {
 			// fetch(
@@ -111,6 +127,5 @@ export class MyProducts {
 		const icon = document.createElement("i");
 		icon.className = "right chevron icon";
 		button.appendChild(icon);
-
 	}
 }
