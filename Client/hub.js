@@ -62,7 +62,6 @@ export class Hub {
 			let buyProducts = new BuyProducts();
 			buyProducts.draw(this.currentPage);
 		};
-		this.currentButton = buyProductsButton;
 
 		const notifButton = document.createElement("a");
 		notifButton.className = "item";
@@ -98,6 +97,8 @@ export class Hub {
 		this.container.appendChild(hubBottom);
 		this.currentPage = hubBottom;
 
+		//sta je otvoreno na pocetku
+		this.currentButton = myProductsButton;
 		let myProducts = new MyProducts();
 		myProducts.draw(hubBottom);
 	}

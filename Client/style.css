@@ -48,4 +48,5 @@ body {
 
 .hubBottom {
 	display: flex;
+	flex-direction: column;
 }
