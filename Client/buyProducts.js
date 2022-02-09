@@ -109,10 +109,19 @@ export class BuyProducts {
 			+parseInt(maxInput.value)+"&" + asc)
 			.then(p => {
 				p.json().then(products => {
-					products.forEach(p => {
-						const product = new ProductView(p.id, p.name, p.price, p.user, p.tags, p.img);
+					for (var p in products) {
+						console.log(p);
+						const product = new ProductView(
+							products[p]._id,
+							products[p].name,
+							products[p].price,
+							products[p].user,
+							products[p].tags,
+							products[p].imgUrl
+						);
 						this.drawProductViewForBuy(productsDiv, product);
-					});
+						console.log(product.id,product.name);
+			};
 
 					let nextButton = document.createElement("button");
 					nextButton.className = "ui green button buttonPage";
@@ -201,7 +210,7 @@ export class BuyProducts {
 		element.appendChild(line);
 
 		button.onclick = () => {
-			
+
 		}
 		}
 }
