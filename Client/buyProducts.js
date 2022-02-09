@@ -123,14 +123,14 @@ export class BuyProducts {
 							p,
 							products[p].name,
 							products[p].price,
-							products[p].user,
+							products[p].username,
 							products[p].tags,
 							products[p].imgUrl,
 							products[p].product
 						);
 						this.drawProductViewForBuy(productsDiv, product);
 						br++;
-						console.log(product);
+					
 						
 			};
 					if(br==0 && page==1)
@@ -147,11 +147,11 @@ export class BuyProducts {
 					prevButton.className = "ui green button buttonPage";
 					prevButton.innerHTML = "Previous";
 
-					if(br == 3 && page == 1)
+					if(br == 5 && page == 1)
 					{
 						productsDiv.appendChild(nextButton);
 					}
-					else if(br == 3 && page > 1)
+					else if(br == 5 && page > 1)
 					{
 						let rowButtons = document.createElement("div");
 						rowButtons.appendChild(prevButton);
@@ -159,7 +159,7 @@ export class BuyProducts {
 
 						productsDiv.appendChild(rowButtons);
 					}
-					else if(br < 3 && page > 1)
+					else if(br < 5 && page > 1)
 					{
 						productsDiv.appendChild(prevButton);
 					}
@@ -192,7 +192,8 @@ export class BuyProducts {
 
 		const image = document.createElement("img");
 		image.className = "image img3";
-		image.src = "./image.png";
+		console.log(product.img);
+		image.src = "https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278__340.jpg";
 		element.appendChild(image);
 
 		const content = document.createElement("content");
@@ -260,12 +261,12 @@ export class BuyProducts {
 								productJson.img,
 								productJson.description
 							);
-
+								console.log(productView);
 							fetch(
-								"https://localhost:7085/FleaMarket/GetUserDetails/" + productView.user)
+								"https://localhost:7085/FleaMarket/GetUserDetails/" + productView.username)
 								.then(q => {
 									q.json().then(userInfo => {
-							this.drawProduct(rightDiv, product, userInfo);
+							this.drawProduct(rightDiv, product, userInfo, productView.username, productView.id);
 									})
 								})
 							
@@ -273,14 +274,15 @@ export class BuyProducts {
 			});
 		}
 	
-		drawProduct(rightDiv, product, userInfo)
+		drawProduct(rightDiv, product, userInfo, sellerUsername, idProduct)
 		{
 			const firstDiv = document.createElement("div");
 			firstDiv.className = "firstDiv2";
 			rightDiv.appendChild(firstDiv);
 
 			const img = document.createElement("img");
-			img.src = "./image.png";
+			
+			img.src = "https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278__340.jpg";
 			img.className = "img2";
 			firstDiv.appendChild(img);
 
@@ -300,7 +302,7 @@ export class BuyProducts {
 			descriptionH2.innerHTML = "Description: "+product.description;
 			rightFirstDiv.appendChild(descriptionH2);
 			
-			console.log(userInfo);
+			
 			
 			product.customAttributes.forEach(element => {
 				let att = document.createElement("h2");
@@ -308,12 +310,39 @@ export class BuyProducts {
 				rightDiv.appendChild(att);
 			});
 
+			const lab = document.createElement("h2");
+			lab.innerHTML = "Seller info:";
+			lab.style.marginTop  = "50px";
+			rightDiv.appendChild(lab);
+
+
+			const name = document.createElement("div");
+			rightDiv.appendChild(name);
+			name.className = "fontSize";
+			name.innerHTML = "Full name: " +userInfo[0] + " " +userInfo[1];
+
+			const city = document.createElement("div");
+			rightDiv.appendChild(city);
+			city.className = "fontSize";
+			city.innerHTML = "City: " +userInfo[2];
+
+			const contact = document.createElement("div");
+			rightDiv.appendChild(contact);
+			contact.className = "fontSize";
+			contact.innerHTML = "Phone number: " +userInfo[3];
+
+			
+			console.log(this.user.username, sellerUsername);
+			if(this.user.username != sellerUsername)
+			{
+
 			const barterDiv = document.createElement("div");
 			barterDiv.className = "barterDiv2";
+			barterDiv.style.alignSelf = "end";
 			rightDiv.appendChild(barterDiv);
 
 			const labBarter = document.createElement("h2");
-			labBarter.innerHTML = "Suggested price: ";
+			labBarter.innerHTML = "Suggest price: ";
 			barterDiv.appendChild(labBarter);
 
 			const semanticBarter = document.createElement("div");
@@ -334,15 +363,45 @@ export class BuyProducts {
 			buttBarter.className = "ui green button";
 			buttBarter.innerHTML = "Begin barter";
 			barterDiv.appendChild(buttBarter);
-			
-			
 
+			buttBarter.onclick = () => {
+				let price =parseInt(inpBarter.value);
 
-			
+				fetch(
+					"https://localhost:7085/FleaMarket/CheckNotification/" + sellerUsername +"&"+this.user.username+"&"+idProduct)
+					.then(q => {
+						if(q.status==400)
+						{
+							alert("Your offer is already sent !");
+						}
+						else if(q.status == 200)
+						{
+							fetch(`https://localhost:7085/FleaMarket/CreateNotification/`+sellerUsername, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					username: this.user.username,
+					firstName: this.user.firstName,
+					lastName: this.user.lastName,
+					productName: product.name,
+					productId: idProduct,
+					price: price ,
+					barter: true,
+				}),
+			}).then(p => {
+				if (p.ok)
+					alert("Your offer has been sent ");
+						})
+					}
+				else
+					console.log("Error");		
+		
+			})
 
-
-			
+		
 		}
-}
+	}
+		}
+	}
 	
 

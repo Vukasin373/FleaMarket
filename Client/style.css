@@ -154,3 +154,7 @@ body {
 	display: flex;
 	margin-top: 20px;
 }
+
+.fontSize {
+	font-size: 20px;
+}

@@ -22,12 +22,12 @@ export class Profile {
 		 infoH2.innerHTML = "User information";
 		 leftDiv.appendChild(infoH2);
 
-		 const labelArray = ["Username:","First name:", "Last name:", "Contact:", "City:", "Money:"];
+		 const labelArray = ["Username: ","First name: ", "Last name: ", "Contact: ", "City: ", "Money: "];
 		 const infoArray = [user.username, user.firstName, user.lastName, user.contact, user.city, user.money];
 
 		 labelArray.forEach((element,i) => {
 			 const row = document.createElement("h3");
-			 if(element=="Money:")
+			 if(element=="Money: ")
 			 {
 				row.innerHTML = element + infoArray[i] + " $";
 			 	

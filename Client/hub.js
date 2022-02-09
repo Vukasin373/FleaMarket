@@ -60,7 +60,7 @@ export class Hub {
 			buyProductsButton.classList.add("active");
 
 			this.currentPage.removeChild(this.currentPage.firstChild);
-			let buyProducts = new BuyProducts();
+			let buyProducts = new BuyProducts(this.user);
 			buyProducts.draw(this.currentPage);
 		};
 
