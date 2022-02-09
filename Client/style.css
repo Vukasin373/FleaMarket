@@ -28,8 +28,7 @@ body {
 	width: 500px;
 }
 
-.registerForm1 {
-}
+
 
 .main1 {
 	display: flex;
@@ -62,7 +61,6 @@ body {
 .leftDiv2 {
 	display: flex;
 	flex-direction: column;
-	border: 1px solid black;
 	background-color: lightgrey;
 	padding: 30px;
 	margin: 30px;
@@ -78,14 +76,11 @@ body {
 	display: flex;
 	flex-direction: column;
 	background-color: lightgrey;
-	border: 1px solid black;
+
 	padding: 30px;
 	margin: 30px;
 }
 
-.row2 {
-	display: flex;
-}
 
 .lab2 {
 	align-self: center;
@@ -93,21 +88,20 @@ body {
 }
 
 .button2 {
-	margin-top: 10px;
 	
+	width: 40%;
 }
 
 .rightDiv2 {
-	display: flex;
-	flex-direction: column;
 	background-color: lightgrey;
-	border: 1px solid black;
 	padding: 30px;
 	margin-top: 30px;
 	height: 180px;
 }
 
-
+.row2 {
+	flex-wrap: wrap;
+}
 
 
 .buyProducts2 {
@@ -121,13 +115,14 @@ body {
 
 }
 
-.rowSearch2
-{
-	display: flex;
-	
-}
+
 
 .move2 {
 	margin: 10px;
-	flex-direction: column;
+	
+}
+
+.buttonPage {
+	width: 20%;
+	margin: 200px;
 }
