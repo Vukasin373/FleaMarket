@@ -1,0 +1,73 @@
+.MyProducts3
+{
+    /* border: 3px solid cyan; */
+    max-width: 50%;
+    overflow-wrap: break-word;
+}
+
+.item3
+{
+    display:flex;
+    align-items: stretch;
+    /* border: 3px solid saddlebrown; */
+    padding: 3px;
+    border-bottom: 1px solid black;
+    margin-top: 10px;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    height: max-content;
+}
+
+.img3
+{
+    width: 120px;
+    height: 80px;
+}
+
+.content3
+{
+    /* border: 3px solid purple; */
+    padding: 3px;
+    display: flex;
+    flex-direction: column;
+    overflow-wrap: break-word;
+    position: relative;
+    height: max-content;
+    height: 80px;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.contentTop3
+{
+    /* border: 3px solid orange; */
+    display: flex;
+    justify-content: space-between;
+    max-width: inherit;
+    overflow-wrap: break-word;
+}
+
+.contentTopLeft3
+{
+    /* border: 3px solid white; */
+    max-width: 100%;
+    overflow-wrap: break-word;
+    color:darkgreen;
+}
+
+.contentTopRight3
+{
+    /* border: 3px solid blue; */
+    margin-left: 5px;
+}
+
+.contentBottom3
+{
+    /* border: 3px solid crimson; */
+}
+
+.name3
+{
+    font-size:small;
+    font-weight: bold;
+}

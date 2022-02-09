@@ -2,6 +2,7 @@ import { Profile } from "./profile.js";
 import { MyProducts } from "./myProducts.js";
 import { BuyProducts } from "./buyProducts.js";
 import { NotificationsAndBarter } from "./notificationsAndBarter.js";
+import { User } from "./Entities/User.js";
 import { Start } from "./start.js";
 
 export class Hub {
@@ -32,7 +33,7 @@ export class Hub {
 
 			this.currentPage.removeChild(this.currentPage.firstChild);
 			let profile = new Profile();
-			profile.draw(this.currentPage);
+			profile.draw(this.currentPage,this.user);
 		};
 
 		const myProductsButton = document.createElement("a");
@@ -62,7 +63,6 @@ export class Hub {
 			let buyProducts = new BuyProducts();
 			buyProducts.draw(this.currentPage);
 		};
-		this.currentButton = buyProductsButton;
 
 		const notifButton = document.createElement("a");
 		notifButton.className = "item";
@@ -98,6 +98,8 @@ export class Hub {
 		this.container.appendChild(hubBottom);
 		this.currentPage = hubBottom;
 
+		//sta je otvoreno na pocetku
+		this.currentButton = myProductsButton;
 		let myProducts = new MyProducts();
 		myProducts.draw(hubBottom);
 	}
