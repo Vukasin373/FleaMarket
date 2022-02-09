@@ -366,12 +366,12 @@ namespace Server.Services
 
         internal List<String> GetUserDetails(string id)
         {
-            ObjectId userId = ObjectId.Parse(id);
+            //ObjectId userId = ObjectId.Parse(id);
             var collectionUser = Session.GetCollection<User>("Users");
 
 
 
-            var user = collectionUser.Find(x => x._id == userId).FirstOrDefault();
+            var user = collectionUser.Find(x => x.Username == id).FirstOrDefault();
 
 
 
@@ -583,17 +583,13 @@ namespace Server.Services
 
         public Product GetProductDetails(string id)
         {
-            var collectionView = Session.GetCollection<ProductView>("ProductsView");
-            ProductView productView = collectionView.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
+     
 
 
 
             var collection = Session.GetCollection<Product>("Products");
-            Product product = collection.Find(x => x._id == productView._id).FirstOrDefault();
+            Product product = collection.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
             return product;
         }
     }
-}62024969fc7f73caf749916f
-62024969fc7f73caf749916e
-6202495efc7f73caf749916c
-6202495efc7f73caf749916d
+}
