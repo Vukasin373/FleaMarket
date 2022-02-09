@@ -28,13 +28,16 @@ export class Hub {
 		let profile = new Profile();
 
 		let myProducts = new MyProducts();
-		let buyProducts = new BuyProducts();
+		let buyProducts = new BuyProducts(this.user);
 		let notificationsAndBarter = new NotificationsAndBarter();
 
 		// while (rightDiv3.firstChild) {
 		//     rightDiv3.removeChild(rightDiv3.lastChild);
 		// }
 
+		if(5>6)
 		profile.draw(hubBottom, this.user);
+		else
+		buyProducts.draw(hubBottom);
 	}
 }

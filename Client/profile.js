@@ -58,10 +58,11 @@ export class Profile {
 
 		 const oldPassLabel = document.createElement("label");
 		 oldPassLabel.innerHTML = "Old password: ";
+		 oldPassLabel.className="lab2";
 		 row1.appendChild(oldPassLabel);
 		 
 		 const oldPassInput = document.createElement("input");
-
+		 oldPassInput.type = "password";
 		 row1.appendChild(oldPassInput);
 
 		 const row2 = document.createElement("div");
@@ -70,9 +71,11 @@ export class Profile {
 
 		 const newPassLabel = document.createElement("label");
 		 newPassLabel.innerHTML = "New password: ";
+		 newPassLabel.className="lab2";
 		 row2.appendChild(newPassLabel);
 		 
 		 const newPassInput = document.createElement("input");
+		 newPassInput.type = "password";
 		 row2.appendChild(newPassInput);
 
 		 const buttPass = document.createElement("button");
@@ -127,6 +130,7 @@ export class Profile {
 
 		 const cityLabel = document.createElement("label");
 		 cityLabel.innerHTML = "New city: ";
+		 cityLabel.className="lab2";
 		 row3.appendChild(cityLabel);
 		 
 		 const cityInput = document.createElement("input");
@@ -181,6 +185,7 @@ export class Profile {
 
 		 const contactLabel = document.createElement("label");
 		 contactLabel.innerHTML = "New contact: ";
+		 contactLabel.className="lab2";
 		 row4.appendChild(contactLabel);
 		 
 		 const contactInput = document.createElement("input");
@@ -236,6 +241,8 @@ export class Profile {
 
 		 const moneyLabel = document.createElement("label");
 		 moneyLabel.innerHTML = "Amount: ";
+		 //moneyLabel.style.textAlign ="center";
+		 moneyLabel.className="lab2";
 		 row5.appendChild(moneyLabel);
 		 
 		 const moneyInput = document.createElement("div");
@@ -243,6 +250,7 @@ export class Profile {
 		 moneyInput.className = "ui right labeled input";
 		 const lab = document.createElement("label");
 		 lab.className = "ui label";
+		
 		 lab.innerHTML = "$";
 		 moneyInput.appendChild(lab);
 		 const inp = document.createElement("input");
@@ -259,6 +267,7 @@ export class Profile {
 		 const buttMoney = document.createElement("button");
 		 buttMoney.innerHTML = "Pay in";
 		 buttMoney.className = "ui green button";
+		 buttMoney.classList.add("button2");
 		 
 		 rightDiv.appendChild(buttMoney);
 

@@ -89,9 +89,14 @@ body {
 	display: flex;
 }
 
-.buttPass2 {
-width: 100px;
+.lab2 {
+	align-self: center;
+	margin-right: 5px;
+}
 
+.button2 {
+	margin-top: 10px;
+	
 }
 
 .rightDiv2 {
@@ -105,3 +110,25 @@ width: 100px;
 }
 
 
+
+
+.buyProducts2 {
+	display: flex;
+
+}
+
+.partLeft2 {
+	display: flex;
+	flex-direction: column;
+
+}
+
+.rowSearch2
+{
+	display: flex;
+	
+}
+
+.move2 {
+	margin: 10px;
+}
