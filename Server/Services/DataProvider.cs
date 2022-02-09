@@ -283,28 +283,31 @@ namespace Server.Services
                 {
                     var duplicate = collectionNotification.Find<Notification>(x => x._id == item && x._id != ObjectId.Parse(id)).FirstOrDefault<Notification>();
 
-                    if (duplicate.ProductId == notif.ProductId)
+                    if (duplicate != null)
                     {
-                        var buyerDup = collectionUser.Find(x => x.Username == duplicate.Username).FirstOrDefault();
-                        var filterDup = Builders<User>.Filter.Eq("Username", buyerDup.Username);
-                        var updated = Builders<User>.Update.Set("Money", buyerDup.Money + notif.Price);
-
-                        collectionUser.UpdateOne(filterDup, updated);
-
-                        tmp.Remove(duplicate._id);
-                        collectionNotification.DeleteOne(Builders<Notification>.Filter.Eq("_id", duplicate._id));
-
-                        Notification nd = new Notification
+                        if (duplicate.ProductId == notif.ProductId)
                         {
-                            Barter = false,
-                            FirstName = seller.FirstName,
-                            LastName = seller.LastName,
-                            Price = duplicate.Price,
-                            ProductName = duplicate.ProductName,
-                            Username = "Declined"
-                        };
-                        CreateNotification(nd, buyerDup._id.ToString());
+                            var buyerDup = collectionUser.Find(x => x.Username == duplicate.Username).FirstOrDefault();
+                            var filterDup = Builders<User>.Filter.Eq("Username", buyerDup.Username);
+                            var updated = Builders<User>.Update.Set("Money", buyerDup.Money + notif.Price);
 
+                            collectionUser.UpdateOne(filterDup, updated);
+
+                            tmp.Remove(duplicate._id);
+                            collectionNotification.DeleteOne(Builders<Notification>.Filter.Eq("_id", duplicate._id));
+
+                            Notification nd = new Notification
+                            {
+                                Barter = false,
+                                FirstName = seller.FirstName,
+                                LastName = seller.LastName,
+                                Price = duplicate.Price,
+                                ProductName = duplicate.ProductName,
+                                Username = "Declined"
+                            };
+                            CreateNotification(nd, buyerDup._id.ToString());
+
+                        }
                     }
                 }
             }

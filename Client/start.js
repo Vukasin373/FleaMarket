@@ -75,8 +75,8 @@ export class Start {
 
 		LoginButton.onclick = () => {
 			//hardkodirani login, obrisati u finalnoj verziji
-			loginUsernameInput.value = "vule";
-			loginPasswordInput.value = "vule2";
+			loginUsernameInput.value = "aca";
+			loginPasswordInput.value = "aca";
 			if (loginUsernameInput.value == "" || loginPasswordInput.value == "") {
 				alert("input Login info.");
 				return;
