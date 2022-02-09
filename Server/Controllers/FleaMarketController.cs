@@ -146,7 +146,7 @@ namespace Server.Controllers
 
         [HttpGet]
         [Route("GetNotifications/{username}")]
-        public List<Notification> GetNotifications(string username)
+        public Dictionary<string, Notification> GetNotifications(string username)
         {
             return data.GetNotifications(username);
 

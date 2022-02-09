@@ -98,7 +98,7 @@ namespace Server.Services
             {
                 Name = product.Name,
                 Price = product.Price,
-                Username = user._id.ToString(),
+                Username = user.Username,
                 Tags = product.Tags,
                 ImgUrl = product.ImgUrl,
                 Product = p._id.ToString()
@@ -189,16 +189,16 @@ namespace Server.Services
 
 
 
-        internal List<Notification> GetNotifications(string username)
+        internal Dictionary<string, Notification> GetNotifications(string username)
         {
             var collectionUser = Session.GetCollection<User>("Users");
             var user = collectionUser.Find(x => x.Username == username).FirstOrDefault();
             var tmp = user.Notifications;
 
+            Dictionary<string, Notification> dict = new Dictionary<string, Notification>();
 
 
             var collectionNotification = Session.GetCollection<Notification>("Notifications");
-            List<Notification> notifications = new List<Notification>();
 
 
 
@@ -207,7 +207,7 @@ namespace Server.Services
                 if (i < 0)
                     break;
                 var notif = collectionNotification.Find<Notification>(x => x._id == user.Notifications[i]).FirstOrDefault<Notification>();
-                notifications.Add(notif);
+                dict[notif._id.ToString()] = notif;
 
                 if (notif.Barter == false)
                 {
@@ -225,7 +225,7 @@ namespace Server.Services
 
 
 
-            return notifications;
+            return dict;
         }
 
 
@@ -583,10 +583,6 @@ namespace Server.Services
 
         public Product GetProductDetails(string id)
         {
-     
-
-
-
             var collection = Session.GetCollection<Product>("Products");
             Product product = collection.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
             return product;
