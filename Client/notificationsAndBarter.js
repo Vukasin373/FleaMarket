@@ -4,7 +4,8 @@ export class NotificationsAndBarter {
 	}
 
 	draw(host) {
-		const d = document.createElement("div");
-		host.appendChild(d);
+		const mainDiv1 = document.createElement("div");
+		mainDiv1.className = "mainDiv1";
+		host.appendChild(mainDiv1);
 	}
 }

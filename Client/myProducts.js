@@ -18,7 +18,7 @@ export class MyProducts {
 		fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&1").then((p) => {
 			p.json().then((products) => {
 				for (var p in products) {
-					//console.log(name, product[name]);
+					console.log(p);
 					const product = new ProductView(
 						products[p]._id,
 						products[p].name,
