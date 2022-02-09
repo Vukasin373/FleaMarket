@@ -7,32 +7,12 @@ export class MyProducts {
 	}
 
 	draw(host) {
+
+		//#region 
+
 		this.container = document.createElement("div");
 		this.container.className = "MyProducts3";
 		host.appendChild(this.container);
-
-		const list = document.createElement("div");
-		list.className = "ui relaxed list";
-		this.container.appendChild(list);
-
-		//pribavi produkte
-		fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&1").then((p) => {
-			p.json().then((products) => {
-				for (var p in products) {
-					const product = new ProductView(
-						p,
-						products[p].name,
-						products[p].price,
-						products[p].user,
-						products[p].tags,
-						products[p].imgUrl
-					);
-					this.drawProductView(this.container, product);
-					this.pageNum++;
-				}
-
-			});
-		});
 
 		const buttonBox = document.createElement("div");
 		buttonBox.className = "buttonBox3";
@@ -40,12 +20,54 @@ export class MyProducts {
 
 		const prevButton = document.createElement("button");
 		prevButton.className = "mini ui green bottom attached button button3";
+		prevButton.id = "prevButton3";
+		prevButton.disabled = true;
 		buttonBox.appendChild(prevButton);
 
 		let icon = document.createElement("i");
 		icon.className = "left chevron icon";
 		prevButton.appendChild(icon);
 		prevButton.innerHTML += "Previous";
+
+		prevButton.onclick = () => {
+			//pribavi produkte
+			this.pageNum--;
+
+			fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&" + this.pageNum).then((p) => {
+				p.json().then((products) => {
+
+					// otkljucati next dugme
+					document.getElementById("myBtn3").disabled = false;
+	
+					// obrisati vec prikazane produkte
+					this.container.removeChild(list);
+	
+					list = document.createElement("div");
+					list.className = "ui relaxed list";
+					this.container.appendChild(list);
+	
+	
+					for (var p in products) {
+						const product = new ProductView(
+							p,
+							products[p].name,
+							products[p].price,
+							products[p].user,
+							products[p].tags,
+							products[p].imgUrl
+						);
+						this.drawProductView(list, product);
+					}
+
+					console.log(this.pageNum);
+	
+					if (this.pageNum == 1)
+					{
+						document.getElementById("prevButton3").disabled = true;
+					}
+				});
+			});
+		};
 		
 		const nextButton = document.createElement("button");
 		nextButton.className = "mini ui green bottom attached button";
@@ -57,31 +79,73 @@ export class MyProducts {
 		icon.className = "right chevron icon";
 		nextButton.appendChild(icon);
 
-		nextButton.onclick = () => {
+		nextButton.onclick = () => 
+		{
+			this.pageNum++;
+
+			// omoguciti prev dugme
+			document.getElementById("prevButton3").disabled = false;
+
+			// obrisati prikazane proizvode
+			this.container.removeChild(list);
+
+			list = document.createElement("div");
+			list.className = "ui relaxed list";
+			this.container.appendChild(list);	
+
+			let num = 0;
+
+			//pribavi produkte
+			fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&" + this.pageNum).then((p) => {
+				p.json().then((products) => {
+					for (var p in products) {
+						num++
+						console.log(p);
+						const product = new ProductView(
+							p,
+							products[p].name,
+							products[p].price,
+							products[p].username,
+							products[p].tags,
+							products[p].imgUrl
+						);
+						this.drawProductView(list, product);
+					}
+
+					if (num < 10)
+						document.getElementById("myBtn3").disabled = true;
+				});
+			});
+		};
+
+		let list = document.createElement("div");
+		list.className = "ui relaxed list";
+		this.container.appendChild(list);	
+
 		//pribavi produkte
-		fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&" + this.pageNum).then((p) => {
+		fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&1").then((p) => {
 			p.json().then((products) => {
 				for (var p in products) {
+					console.log(p);
 					const product = new ProductView(
 						p,
 						products[p].name,
 						products[p].price,
-						products[p].user,
+						products[p].username,
 						products[p].tags,
 						products[p].imgUrl
 					);
-					this.drawProductView(this.container, product);
-					if (product.length() == 0)
-					{
-						document.getElementById("myBtn3").disabled = true;
-					}
+					this.drawProductView(list, product);
 				}
 			});
 		});
-		};
-	}
+
+}
+
+	//#endregion
 
 	drawProductView(host, product) {
+
 		const element = document.createElement("div");
 		element.className = "item3";
 		element.id = product.id;
@@ -138,7 +202,6 @@ export class MyProducts {
 				alert("Uspesno ste obrisali proizvod sa nazivom: " + product.name);
 				host.removeChild(element);
 			});
-			console.log(product.id);
 
 		};
 
@@ -151,8 +214,28 @@ export class MyProducts {
 		button.innerHTML = "Show details";
 		contentBottom.appendChild(button);
 
+		button.onclick = () => {
+			this.drawNewProductForm(host, product.product);
+		};
+
 		const icon = document.createElement("i");
 		icon.className = "right chevron icon";
 		button.appendChild(icon);
-	}
+	};
+
+	drawNewProductForm(host, productId)
+	{
+		const form = document.createElement("div");
+		form.className = "form3";
+		host.appendChild(form);
+
+		// pribaviti proizvod
+		fetch("https://localhost:7085/FleaMarket/ProductDetails/" + productId).then((p) => {
+				p.json().then((product) => {
+
+					console.log(product);
+				});
+			});
+		
+	};
 }

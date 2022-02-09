@@ -1,6 +1,6 @@
 .MyProducts3
 {
-    /* border: 3px solid cyan; */
+    border: 3px solid cyan;
     max-width: 50%;
     overflow-wrap: break-word;
 }
@@ -81,4 +81,9 @@
 {
     margin-right: 15px !important;
     margin-left: 15px !important;
+}
+
+.form3
+{
+    border: 3px solid lightseagreen;
 }
