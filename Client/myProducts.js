@@ -24,7 +24,17 @@ export class MyProducts {
 					this.drawProductView(this.container, product);
 				});
 			});
-		});
+		}).finally
+			{
+				const nextButton = document.createElement("button");
+				nextButton.className = "mini ui green bottom attached button";
+				nextButton.innerHTML = "Next";
+				this.container.appendChild(nextButton);
+
+				const icon = document.createElement("i");
+				icon.className = "right chevron icon";
+				nextButton.appendChild(icon);
+			};
 	}
 
 	drawProductView(host, product) {
@@ -85,7 +95,7 @@ export class MyProducts {
 			// 	host.removeChild(mainDiv);
 			// });
 			//this.container.querySelector("");
-			console.log(product.id.toHexString());
+			console.log(product.id.str);
 
 		};
 
