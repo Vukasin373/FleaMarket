@@ -56,6 +56,7 @@ export class MyProducts {
 
 		const price = document.createElement("div");
 		price.innerHTML = product.price;
+		price.className = "name3";
 		contentTopLeft.appendChild(price);
 
 		const contentTopRight = document.createElement("div");
