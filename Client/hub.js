@@ -33,11 +33,11 @@ export class Hub {
 
 			this.currentPage.removeChild(this.currentPage.firstChild);
 			let profile = new Profile();
-			profile.draw(this.currentPage,this.user);
+			profile.draw(this.currentPage, this.user);
 		};
 
 		const myProductsButton = document.createElement("a");
-		myProductsButton.className = "item";
+		myProductsButton.className = "item active";
 		myProductsButton.innerText = "My products";
 		navBar.appendChild(myProductsButton);
 		myProductsButton.onclick = () => {
@@ -51,7 +51,7 @@ export class Hub {
 		};
 
 		const buyProductsButton = document.createElement("a");
-		buyProductsButton.className = "item active";
+		buyProductsButton.className = "item";
 		buyProductsButton.innerText = "Buy products";
 		navBar.appendChild(buyProductsButton);
 		buyProductsButton.onclick = () => {
@@ -74,7 +74,7 @@ export class Hub {
 			notifButton.classList.add("active");
 
 			this.currentPage.removeChild(this.currentPage.firstChild);
-			let notificationsAndBarter = new NotificationsAndBarter();
+			let notificationsAndBarter = new NotificationsAndBarter(this.user);
 			notificationsAndBarter.draw(this.currentPage);
 		};
 

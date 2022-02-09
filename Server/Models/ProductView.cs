@@ -14,7 +14,8 @@ namespace Server.Models
         public ObjectId _id { get; set; }
         public string? Name { get; set; }
         public int Price { get; set; }
-        public ObjectId? User { get; set; }
+        public String? Username { get; set; }
+        public string? Product { get; set; }
         public List<string> Tags { get; set; }
         public string? ImgUrl { get; set; }
         public ProductView()

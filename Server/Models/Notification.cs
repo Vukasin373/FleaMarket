@@ -9,7 +9,7 @@ namespace Server.Models
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? ProductName { get; set; }
-        public ObjectId ProductId { get; set; }
+        public string? ProductId { get; set; }
         public int Price { get; set; }
         public bool Barter { get; set; }
     }
