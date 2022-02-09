@@ -63,7 +63,7 @@ export class MyProducts {
 		contentTop.appendChild(contentTopRight);
 
 		const deleteButton = document.createElement("button");
-		deleteButton.className = "ui red icon button";
+		deleteButton.className = "mini ui right floated red icon button";
 		contentTopRight.appendChild(deleteButton);
 
 		const trashIcon = document.createElement("i");
