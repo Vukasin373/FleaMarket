@@ -109,8 +109,9 @@ export class BuyProducts {
 			+parseInt(maxInput.value)+"&" + asc)
 			.then(p => {
 				p.json().then(products => {
+					let br = 0;
 					for (var p in products) {
-						console.log(p);
+					
 						const product = new ProductView(
 							products[p]._id,
 							products[p].name,
@@ -120,9 +121,11 @@ export class BuyProducts {
 							products[p].imgUrl
 						);
 						this.drawProductViewForBuy(productsDiv, product);
-						console.log(product.id,product.name);
+						br++;
+						
+						
 			};
-
+				
 					let nextButton = document.createElement("button");
 					nextButton.className = "ui green button buttonPage";
 					nextButton.innerHTML = "Next";
@@ -131,11 +134,11 @@ export class BuyProducts {
 					prevButton.className = "ui green button buttonPage";
 					prevButton.innerHTML = "Previous";
 
-					if(products.length == 3 && page == 1)
+					if(br == 3 && page == 1)
 					{
 						productsDiv.appendChild(nextButton);
 					}
-					else if(products.length == 3 && page > 1)
+					else if(br == 3 && page > 1)
 					{
 						let rowButtons = document.createElement("div");
 						rowButtons.appendChild(prevButton);
@@ -143,7 +146,7 @@ export class BuyProducts {
 
 						productsDiv.appendChild(rowButtons);
 					}
-					else if(products.length < 3 && page > 1)
+					else if(br < 3 && page > 1)
 					{
 						productsDiv.appendChild(prevButton);
 					}
