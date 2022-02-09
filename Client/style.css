@@ -39,18 +39,16 @@ body {
 .HubMain {
 	display: flex;
 	flex-direction: column;
-	border: solid black 3px;
 }
 
 .navBar {
-	border: solid red 3px;
 	height: 50px;
 	width: 2000px;
 }
 
 .hubBottom {
 	display: flex;
-	border: solid green 3px;
+	
 	
 }
 
@@ -131,4 +129,5 @@ body {
 
 .move2 {
 	margin: 10px;
+	flex-direction: column;
 }

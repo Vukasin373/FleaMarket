@@ -223,23 +223,22 @@ export class Start {
 				registerInput3.value == "" ||
 				registerInput4.value == ""
 			) {
-				alert("input Login info.");
+				alert("Fill all input fields.");
 				return;
 			}
 			fetch(`https://localhost:7085/FleaMarket/Register`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
-					username: registerUsernameInput,
-					password: registerPasswordInput,
-					firstName: registerInput1,
-					lastName: registerInput2,
-					city: registerInput4,
-					contact: registerInput3,
+					username: registerUsernameInput.value,
+					password: registerPasswordInput.value,
+					firstName: registerInput1.value,
+					lastName: registerInput2.value,
+					city: registerInput4.value,
+					contact: registerInput3.value,
 					money: 0,
 				}),
 			}).then((p) => {
-				console.log(p);
 				if (p.ok)
 					p.json().then((a) => {
 						const profile = new User(
@@ -256,7 +255,7 @@ export class Start {
 						document.body.removeChild(this.container);
 						hub.draw(host);
 					});
-				else alert("Invalid Sign in");
+				else alert("Username already in use.");
 			});
 		};
 	}
