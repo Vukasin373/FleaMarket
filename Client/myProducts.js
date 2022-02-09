@@ -15,14 +15,32 @@ export class MyProducts {
 		this.container.appendChild(list);
 
 		//pribavi produkte
-		fetch(
-			"https://localhost:7085/FleaMarket/GetMyProducts/aca&1"
-		).then((p) => {
-			p.json().then((product) => {
-				product.forEach((p) => {
-					const product = new ProductView(p.id, p.name, p.price, p.user, p.tags, p.img);
+		fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&1").then((p) => {
+			p.json().then((products) => {
+				for (var p in products) {
+					//console.log(name, product[name]);
+					const product = new ProductView(
+						products[p]._id,
+						products[p].name,
+						products[p].price,
+						products[p].user,
+						products[p].tags,
+						products[p].imgUrl
+					);
 					this.drawProductView(this.container, product);
-				});
+				}
+
+				// product.forEach((p) => {
+				// 	const product = new ProductView(
+				// 		p._id,
+				// 		p.name,
+				// 		p.price,
+				// 		p.user,
+				// 		p.tags,
+				// 		p.imgUrl
+				// 	);
+				// 	this.drawProductView(this.container, product);
+				// });
 			});
 		});
 	}
@@ -30,6 +48,7 @@ export class MyProducts {
 	drawProductView(host, product) {
 		const element = document.createElement("div");
 		element.className = "item3";
+		element.id = product.id;
 		host.appendChild(element);
 
 		const image = document.createElement("img");
@@ -50,12 +69,13 @@ export class MyProducts {
 		contentTop.appendChild(contentTopLeft);
 
 		const name = document.createElement("div");
-		name.innerHTML = product.name
+		name.innerHTML = product.name;
 		name.className = "name3";
 		contentTopLeft.appendChild(name);
 
 		const price = document.createElement("div");
 		price.innerHTML = product.price;
+		price.className = "name3";
 		contentTopLeft.appendChild(price);
 
 		const contentTopRight = document.createElement("div");
@@ -63,12 +83,28 @@ export class MyProducts {
 		contentTop.appendChild(contentTopRight);
 
 		const deleteButton = document.createElement("button");
-		deleteButton.className = "ui red icon button";
+		deleteButton.className = "mini ui right floated red icon button";
 		contentTopRight.appendChild(deleteButton);
 
 		const trashIcon = document.createElement("i");
 		trashIcon.className = "trash icon";
 		deleteButton.appendChild(trashIcon);
+
+		deleteButton.onclick = () => {
+			// fetch(
+			// 	`https://localhost:7085/FleaMarket/DeleteProduct/${product.id}`,
+			// 	{
+			// 		method: "DELETE",
+			// 		headers: { "Content-Type": "application/json" },
+			// 	}
+			// ).then((p) => {
+			// 	host.removeChild(mainDiv);
+			// });
+			//this.container.querySelector("");
+			console.log(product.id);
+			console.log(product);
+			console.log(product.id.toString());
+		};
 
 		const contentBottom = document.createElement("div");
 		contentBottom.className = "contentBottom3";
@@ -82,8 +118,5 @@ export class MyProducts {
 		const icon = document.createElement("i");
 		icon.className = "right chevron icon";
 		button.appendChild(icon);
-
-		const line = document.createElement("h");
-		element.appendChild(line);
 	}
 }
