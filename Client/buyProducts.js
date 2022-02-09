@@ -13,11 +13,15 @@ export class BuyProducts {
 
 		this.container = document.createElement("div");
 		this.container.className = "buyProducts2";
+		
 		host.appendChild(this.container);
 
 		const leftDiv = document.createElement("div");
 		leftDiv.className = "partLeft2";
 		this.container.appendChild(leftDiv);
+		const rightDiv = document.createElement("div");
+		rightDiv.className = "partRight2";
+		this.container.appendChild(rightDiv);
 
 		const row = document.createElement("div");
 		row.className = "rowSearch2";
@@ -111,9 +115,8 @@ export class BuyProducts {
 				p.json().then(products => {
 					let br = 0;
 					for (var p in products) {
-					
 						const product = new ProductView(
-							products[p]._id,
+							p,
 							products[p].name,
 							products[p].price,
 							products[p].user,
@@ -125,7 +128,12 @@ export class BuyProducts {
 						
 						
 			};
-				
+					if(br==0)
+					{
+						alert ("No results");
+					}
+					else
+					{
 					let nextButton = document.createElement("button");
 					nextButton.className = "ui green button buttonPage";
 					nextButton.innerHTML = "Next";
@@ -157,11 +165,11 @@ export class BuyProducts {
 					prevButton.onclick = () => {
 						this.pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, page - 1)
 					}
-
+				}
 				});
 			}).catch(q => { console.log("Error")});
 		}
-
+	
 
 		drawProductViewForBuy(productsDiv, product)
 		{
@@ -213,8 +221,67 @@ export class BuyProducts {
 		element.appendChild(line);
 
 		button.onclick = () => {
-
+			this.getProductDetails(product)
 		}
+		}
+
+		getProductDetails(productView)
+		{
+			const rightDiv = this.container.querySelector(".partRight2");
+			while (rightDiv.firstChild) {
+				rightDiv.removeChild(rightDiv.lastChild);
+			}
+
+			fetch(
+				"https://localhost:7085/FleaMarket/GetProductDetails/" + productView.id)
+				.then(p => {
+					p.json().then(productJson => {
+							const product = new Product(
+								productJson.id,
+								productJson.name,
+								productJson.price,
+								productJson.customAttributes,
+								productJson.tags,
+								productJson.img,
+								productJson.description
+							);
+							this.drawProduct(rightDiv, product);
+							
+							
+							
+				});
+			});
+		}
+	
+		drawProduct(rightDiv, product)
+		{
+			const firstDiv = document.createElement("div");
+			firstDiv.className = "firstDiv2";
+			rightDiv.appendChild(firstDiv);
+
+			const img = document.createElement("img");
+			img.src = product.img;
+			img.className = "img2";
+			firstDiv.appendChild(img);
+
+			const rightFirstDiv = document.createElement("div");
+			rightFirstDiv.className = "rightFirstDiv2";
+			firstDiv.appendChild(rightFirstDiv);
+
+			const nameH2 = document.createElement("h2");
+			nameH2.innerHTML = "Name: "+product.name;
+			rightFirstDiv.appendChild(nameH2);
+
+			const priceH2 = document.createElement("h2");
+			priceH2.innerHTML = "Price: "+product.price;
+			rightFirstDiv.appendChild(priceH2);
+
+			const descriptionH2 = document.createElement("h2");
+			descriptionH2.innerHTML = "Description: "+product.description;
+			rightFirstDiv.appendChild(descriptionH2);
+
+
+			
 		}
 }
 	

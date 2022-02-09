@@ -126,3 +126,21 @@ body {
 	width: 20%;
 	margin: 200px;
 }
+
+.firstDiv2 {
+	display: flex;
+}
+
+.img2 {
+	
+}
+
+.partRigth2 {
+	display: flex;
+	flex-direction: column;
+}
+
+.rightFirstDiv2 {
+	display: flex;
+	flex-direction: column;
+}
