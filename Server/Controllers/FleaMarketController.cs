@@ -130,7 +130,7 @@ namespace Server.Controllers
 
         [HttpGet]
         [Route("GetSearchResults/{tag}&{page}&{minPrice}&{maxPrice}&{asc}")]
-        public List<ProductView> GetSearchResults(string tag, int page, int minPrice, int maxPrice, bool asc)
+        public Dictionary<string, ProductView> GetSearchResults(string tag, int page, int minPrice, int maxPrice, bool asc)
         {
             return data.GetSearchResults(tag, page, minPrice, maxPrice, asc);
 
