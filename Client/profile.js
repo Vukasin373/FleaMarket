@@ -63,6 +63,7 @@ export class Profile {
 		 
 		 const oldPassInput = document.createElement("input");
 		 oldPassInput.type = "password";
+		 oldPassInput.className = "ui input focus";
 		 row1.appendChild(oldPassInput);
 
 		 const row2 = document.createElement("div");
@@ -75,12 +76,13 @@ export class Profile {
 		 row2.appendChild(newPassLabel);
 		 
 		 const newPassInput = document.createElement("input");
+		 newPassInput.className = "ui input focus";
 		 newPassInput.type = "password";
 		 row2.appendChild(newPassInput);
 
 		 const buttPass = document.createElement("button");
 		 buttPass.innerHTML = "Confirm";
-		 buttPass.className = "ui green button";
+		 buttPass.className = "ui green button button2";
 		 firstMiddleDiv.appendChild(buttPass);
 
 		 buttPass.onclick = ()=>{
@@ -134,11 +136,12 @@ export class Profile {
 		 row3.appendChild(cityLabel);
 		 
 		 const cityInput = document.createElement("input");
+		 cityInput.className = "ui input focus";
 		 row3.appendChild(cityInput);
 
 		 const buttCity = document.createElement("button");
 		 buttCity.innerHTML = "Confirm";
-		 buttCity.className = "ui green button";
+		 buttCity.className = "ui green button button2";
 		 secondMiddleDiv.appendChild(buttCity);
 
 		 buttCity.onclick = ()=>{
@@ -189,11 +192,12 @@ export class Profile {
 		 row4.appendChild(contactLabel);
 		 
 		 const contactInput = document.createElement("input");
+		 contactInput.className = "ui input focus";
 		 row4.appendChild(contactInput);
 
 		 const buttContact = document.createElement("button");
 		 buttContact.innerHTML = "Confirm";
-		 buttContact.className = "ui green button";
+		 buttContact.className = "ui green button button2";
 		 thirdMiddleDiv.appendChild(buttContact);
 
 		 buttContact.onclick = ()=>{

@@ -54,10 +54,10 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        [Route("CreateNotification/{id}")]
-        public IActionResult CreateNotification([FromBody] Notification notif, string id)
+        [Route("CreateNotification/{username}")]
+        public IActionResult CreateNotification([FromBody] Notification notif, string username)
         {
-            if (data.CreateBarterNotification(notif, id))
+            if (data.CreateBarterNotification(notif, username))
                 return Ok();
             return BadRequest();
         }
