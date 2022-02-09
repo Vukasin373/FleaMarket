@@ -3,6 +3,7 @@ import { ProductView } from "./Entities/ProductView.js";
 export class MyProducts {
 	constructor() {
 		this.container = null;
+		this.pageNum = 1;
 	}
 
 	draw(host) {
@@ -18,9 +19,8 @@ export class MyProducts {
 		fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&1").then((p) => {
 			p.json().then((products) => {
 				for (var p in products) {
-					//console.log(name, product[name]);
 					const product = new ProductView(
-						products[p]._id,
+						p,
 						products[p].name,
 						products[p].price,
 						products[p].user,
@@ -28,31 +28,57 @@ export class MyProducts {
 						products[p].imgUrl
 					);
 					this.drawProductView(this.container, product);
+					this.pageNum++;
 				}
 
-				// product.forEach((p) => {
-				// 	const product = new ProductView(
-				// 		p._id,
-				// 		p.name,
-				// 		p.price,
-				// 		p.user,
-				// 		p.tags,
-				// 		p.imgUrl
-				// 	);
-				// 	this.drawProductView(this.container, product);
-				// });
 			});
-		}).finally
-			{
-				const nextButton = document.createElement("button");
-				nextButton.className = "mini ui green bottom attached button";
-				nextButton.innerHTML = "Next";
-				this.container.appendChild(nextButton);
+		});
 
-				const icon = document.createElement("i");
-				icon.className = "right chevron icon";
-				nextButton.appendChild(icon);
-			};
+		const buttonBox = document.createElement("div");
+		buttonBox.className = "buttonBox3";
+		this.container.appendChild(buttonBox);
+
+		const prevButton = document.createElement("button");
+		prevButton.className = "mini ui green bottom attached button button3";
+		buttonBox.appendChild(prevButton);
+
+		let icon = document.createElement("i");
+		icon.className = "left chevron icon";
+		prevButton.appendChild(icon);
+		prevButton.innerHTML += "Previous";
+		
+		const nextButton = document.createElement("button");
+		nextButton.className = "mini ui green bottom attached button";
+		nextButton.id = "myBtn3";
+		nextButton.innerHTML = "Next";
+		buttonBox.appendChild(nextButton);
+
+		icon = document.createElement("i");
+		icon.className = "right chevron icon";
+		nextButton.appendChild(icon);
+
+		nextButton.onclick = () => {
+		//pribavi produkte
+		fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&" + this.pageNum).then((p) => {
+			p.json().then((products) => {
+				for (var p in products) {
+					const product = new ProductView(
+						p,
+						products[p].name,
+						products[p].price,
+						products[p].user,
+						products[p].tags,
+						products[p].imgUrl
+					);
+					this.drawProductView(this.container, product);
+					if (product.length() == 0)
+					{
+						document.getElementById("myBtn3").disabled = true;
+					}
+				}
+			});
+		});
+		};
 	}
 
 	drawProductView(host, product) {
@@ -101,17 +127,18 @@ export class MyProducts {
 		deleteButton.appendChild(trashIcon);
 
 		deleteButton.onclick = () => {
-			// fetch(
-			// 	`https://localhost:7085/FleaMarket/DeleteProduct/${product.id}`,
-			// 	{
-			// 		method: "DELETE",
-			// 		headers: { "Content-Type": "application/json" },
-			// 	}
-			// ).then((p) => {
-			// 	host.removeChild(mainDiv);
-			// });
-			//this.container.querySelector("");
-			console.log(product.id.str);
+			fetch(
+				`https://localhost:7085/FleaMarket/DeleteProduct/${product.id}`,
+				{
+					method: "DELETE",
+					headers: { "Content-Type": "application/json" },
+				}
+			).then((p) => {
+				// 
+				alert("Uspesno ste obrisali proizvod sa nazivom: " + product.name);
+				host.removeChild(element);
+			});
+			console.log(product.id);
 
 		};
 
