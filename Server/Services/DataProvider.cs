@@ -626,7 +626,7 @@ namespace Server.Services
 
             User u = collectionUser.Find<User>(x => x.Username == p.Username).FirstOrDefault<User>();
 
-
+            this.DeleteNotificationsByProduct(p.Username, id);
 
             u.Products.Remove(objectId);
 
