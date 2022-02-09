@@ -436,7 +436,7 @@ namespace Server.Services
                           productView.Price <= maxPrice &&
                           productView.Tags.Contains(tag)
                           orderby productView.Price ascending
-                          select productView).Skip<ProductView>((page - 1) * 10).Take<ProductView>(10).ToList<ProductView>();
+                          select productView).Skip<ProductView>((page - 1) * 3).Take<ProductView>(3).ToList<ProductView>();
             }
             else
             {

@@ -1,3 +1,5 @@
+import { ProductView } from "./Entities/ProductView.js";
+
 export class BuyProducts {
 	constructor(user) {
 		this.container = null;
@@ -74,5 +76,134 @@ export class BuyProducts {
 		findBut.innerHTML = "Find";
 		findBut.className = "ui green button move2";
 		row.appendChild(findBut);
+
+		const productsDiv = document.createElement("div");
+		productsDiv.className = "productsDiv2";
+		leftDiv.appendChild(productsDiv);
+
+
+
+		findBut.onclick = () => {
+			this.pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, 1);
+			}
 	}
+
+	pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, page)
+	{
+		while (productsDiv.firstChild) {
+			productsDiv.removeChild(productsDiv.lastChild);
+		}
+
+		if (minInput.value=="")
+			minInput.value = "0";
+		
+		if (maxInput.value=="")
+			maxInput.value = "999999";
+
+		let asc = false;
+		if (sortSelect.value == "1")
+			asc = true;
+	
+		fetch(
+			"https://localhost:7085/FleaMarket/GetSearchResults/" + tagInput.value+"&"+page+"&"+ parseInt(minInput.value)+"&"
+			+parseInt(maxInput.value)+"&" + asc)
+			.then(p => {
+				p.json().then(products => {
+					products.forEach(p => {
+						const product = new ProductView(p.id, p.name, p.price, p.user, p.tags, p.img);
+						this.drawProductViewForBuy(productsDiv, product);
+					});
+
+					let nextButton = document.createElement("button");
+					nextButton.className = "ui green button buttonPage";
+					nextButton.innerHTML = "Next";
+
+					let prevButton = document.createElement("button");
+					prevButton.className = "ui green button buttonPage";
+					prevButton.innerHTML = "Previous";
+
+					if(products.length == 3 && page == 1)
+					{
+						productsDiv.appendChild(nextButton);
+					}
+					else if(products.length == 3 && page > 1)
+					{
+						let rowButtons = document.createElement("div");
+						rowButtons.appendChild(prevButton);
+						rowButtons.appendChild(nextButton);
+
+						productsDiv.appendChild(rowButtons);
+					}
+					else if(products.length < 3 && page > 1)
+					{
+						productsDiv.appendChild(prevButton);
+					}
+
+					nextButton.onclick = () => {
+						this.pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, page + 1)
+					}
+					prevButton.onclick = () => {
+						this.pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, page - 1)
+					}
+
+				});
+			}).catch(q => { console.log("Error")});
+		}
+
+
+		drawProductViewForBuy(productsDiv, product)
+		{
+		const element = document.createElement("div");
+		element.className = "item3";
+		productsDiv.appendChild(element);
+
+		const image = document.createElement("img");
+		image.className = "image img3";
+		image.src = "./image.png";
+		element.appendChild(image);
+
+		const content = document.createElement("content");
+		content.className = "content content3";
+		element.appendChild(content);
+
+		const contentTop = document.createElement("div");
+		contentTop.className = "contentTop3";
+		content.appendChild(contentTop);
+
+		const contentTopLeft = document.createElement("div");
+		contentTopLeft.className = "contentTopLeft3";
+		contentTop.appendChild(contentTopLeft);
+
+		const name = document.createElement("div");
+		name.innerHTML = product.name
+		name.className = "name3";
+		contentTopLeft.appendChild(name);
+
+		const price = document.createElement("div");
+		price.innerHTML = product.price;
+		contentTopLeft.appendChild(price);
+
+
+		const contentBottom = document.createElement("div");
+		contentBottom.className = "contentBottom3";
+		content.appendChild(contentBottom);
+
+		const button = document.createElement("button");
+		button.className = "mini ui green bottom attached button";
+		button.innerHTML = "Show details";
+		contentBottom.appendChild(button);
+
+		const icon = document.createElement("i");
+		icon.className = "right chevron icon";
+		button.appendChild(icon);
+
+		const line = document.createElement("h");
+		element.appendChild(line);
+
+		button.onclick = () => {
+			
+		}
+		}
 }
+	
+
