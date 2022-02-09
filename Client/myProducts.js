@@ -21,7 +21,7 @@ export class MyProducts {
 			p.json().then((product) => {
 				product.forEach((p) => {
 					const product = new ProductView(p.id, p.name, p.price, p.user, p.tags, p.img);
-					this.drawProductView(host, product);
+					this.drawProductView(this.container, product);
 				});
 			});
 		});
@@ -75,7 +75,7 @@ export class MyProducts {
 		content.appendChild(contentBottom);
 
 		const button = document.createElement("button");
-		button.className = "ui green bottom attached button";
+		button.className = "mini ui green bottom attached button";
 		button.innerHTML = "Show details";
 		contentBottom.appendChild(button);
 
