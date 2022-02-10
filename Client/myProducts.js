@@ -391,7 +391,7 @@ export class MyProducts {
 		host.appendChild(editButton);
 
 		editButton.onclick = () => {
-			fetch(`https://localhost:7085/UpdateProduct/` + idProductView, {
+			fetch("https://localhost:7085/FleaMarket/UpdateProduct/" + idProductView, {
 				method: "PUT",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
@@ -409,8 +409,13 @@ export class MyProducts {
 					  }
 					]
 				}),
+			}).then(p => {
+				if(p.ok)
+				{
+					alert("You have successfully saved your changes");
+				};
 			});
-		}
+		};
 	};
 
 	drawFormElement(host, lblText, type, className, initial) {
