@@ -148,7 +148,7 @@ export class MyProducts {
 					);
 					count++;
 					this.drawProductView(list, product, this.container, form);
-					//console.log(product);
+					//onsole.log(product);
 				}
 				if(count < 10)
 				{
@@ -171,7 +171,7 @@ export class MyProducts {
 
 		const image = document.createElement("img");
 		image.className = "image img3";
-		image.src = "./image.png";
+		image.src = product.img;
 		element.appendChild(image);
 
 		const content = document.createElement("content");
@@ -240,18 +240,18 @@ export class MyProducts {
 			container.appendChild(form);
 
 			fetch("https://localhost:7085/FleaMarket/GetProductDetails/" + product.product).then((p) => {
-				p.json().then((product) => {
+				p.json().then((prodObj) => {
 					let prod = new Product(
-						product._id,
-						product.imgUrl,
-						product.price,
-						product.description,
-						product.name,
-						product.tags,
-						product.customAttributes
+						prodObj._id,
+						prodObj.imgUrl,
+						prodObj.price,
+						prodObj.description,
+						prodObj.name,
+						prodObj.tags,
+						prodObj.customAttributes
 						);
-						
-						this.drawNewProductForm(form, product);
+						console.log(prodObj);
+						this.drawNewProductForm(form, prod, product.id);
 				});
 			});
 		};
@@ -261,7 +261,7 @@ export class MyProducts {
 		button.appendChild(icon);
 	};
 
-	drawNewProductForm(host, product)
+	drawNewProductForm(host, product, ProductID)
 	{
 		const upper = document.createElement("div");
 		upper.className = "upper3";
@@ -273,7 +273,7 @@ export class MyProducts {
 
 		const image = document.createElement("img");
 		image.className = "formImage3";
-		image.src = "./image.png";
+		image.src = product.imgUrl;
 		upperLeft.appendChild(image);
 
 		const upperRight = document.createElement("div");
@@ -390,7 +390,26 @@ export class MyProducts {
 		host.appendChild(editButton);
 
 		editButton.onclick = () => {
-		}
+			fetch(`https://localhost:7085/UpdateProduct/` + ProductID, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					imgUrl: "string",
+					price: 0,
+					description: "string",
+					name: "string",
+					tags: [
+					  "string"
+					],
+					customAttributes: [
+					  {
+						"name": "string",
+						"value": "string"
+					  }
+					]
+				}),
+			});
+		};
 	};
 
 	drawFormElement(host, lblText, type, className, initial) {

@@ -1,14 +1,15 @@
 .MyProducts3 {
-	border: 3px solid cyan;
+	/* border: 3px solid cyan; */
 	overflow-wrap: break-word;
 	display: flex;
 }
 
 .leftSide3 {
-	border: 3px solid salmon;
+	/* border: 3px solid salmon; */
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
+	margin-right: 50px;
 }
 
 .list3 {
@@ -85,7 +86,7 @@
 }
 
 .form3 {
-	border: 3px solid lightseagreen;
+	/* border: 3px solid lightseagreen; */
 	display: flex;
 	flex-direction: column;
 	max-width: 80%;
