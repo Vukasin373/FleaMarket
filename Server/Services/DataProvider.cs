@@ -564,15 +564,15 @@ namespace Server.Services
 
 
 
-        internal void UpdateProduct(Product product)
+        internal void UpdateProduct(Product product, string productID)
         {
             var collectionProduct = Session.GetCollection<Product>("Products");
             var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
 
 
 
-            ProductView pView = collectionProductView.Find<ProductView>(x => x._id == product._id).FirstOrDefault<ProductView>();
-            Product p = collectionProduct.Find<Product>(x => x._id == product._id).FirstOrDefault<Product>();
+            ProductView pView = collectionProductView.Find<ProductView>(x => x._id == ObjectId.Parse(productID)).FirstOrDefault<ProductView>();
+            Product p = collectionProduct.Find<Product>(x => x._id == ObjectId.Parse(pView.Product)).FirstOrDefault<Product>();
 
 
 
@@ -585,7 +585,7 @@ namespace Server.Services
 
 
 
-            var filter = Builders<Product>.Filter.Eq("_Id", product._id);
+            var filter = Builders<Product>.Filter.Eq("_Id", ObjectId.Parse(pView.Product));
 
 
 
