@@ -7,9 +7,6 @@ export class MyProducts {
 	}
 
 	draw(host) {
-
-		//#region 
-
 		this.container = document.createElement("div");
 		this.container.className = "MyProducts3";
 		host.appendChild(this.container);
@@ -52,7 +49,8 @@ export class MyProducts {
 							p,
 							products[p].name,
 							products[p].price,
-							products[p].user,
+							products[p].username,
+							products[p].product,
 							products[p].tags,
 							products[p].imgUrl
 						);
@@ -106,6 +104,7 @@ export class MyProducts {
 							products[p].name,
 							products[p].price,
 							products[p].username,
+							products[p].product,
 							products[p].tags,
 							products[p].imgUrl
 						);
@@ -126,12 +125,13 @@ export class MyProducts {
 		fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&1").then((p) => {
 			p.json().then((products) => {
 				for (var p in products) {
-					console.log(p);
+					//console.log(p);
 					const product = new ProductView(
 						p,
 						products[p].name,
 						products[p].price,
 						products[p].username,
+						products[p].product,
 						products[p].tags,
 						products[p].imgUrl
 					);
@@ -140,9 +140,7 @@ export class MyProducts {
 			});
 		});
 
-}
-
-	//#endregion
+	};
 
 	drawProductView(host, product) {
 
@@ -230,6 +228,7 @@ export class MyProducts {
 		host.appendChild(form);
 
 		// pribaviti proizvod
+		console.log(productId);
 		fetch("https://localhost:7085/FleaMarket/ProductDetails/" + productId).then((p) => {
 				p.json().then((product) => {
 
