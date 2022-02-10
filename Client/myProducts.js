@@ -239,6 +239,7 @@ export class MyProducts {
 			form.className = "form3";
 			container.appendChild(form);
 
+			const idProductView = product.id;
 			fetch("https://localhost:7085/FleaMarket/GetProductDetails/" + product.product).then((p) => {
 				p.json().then((product) => {
 					let prod = new Product(
@@ -251,7 +252,7 @@ export class MyProducts {
 						product.customAttributes
 						);
 						//console.log(product);
-						this.drawNewProductForm(form, product);
+						this.drawNewProductForm(form, product, idProductView);
 				});
 			});
 		};
@@ -261,7 +262,7 @@ export class MyProducts {
 		button.appendChild(icon);
 	};
 
-	drawNewProductForm(host, product)
+	drawNewProductForm(host, product, idProductView)
 	{
 		const upper = document.createElement("div");
 		upper.className = "upper3";
@@ -390,7 +391,25 @@ export class MyProducts {
 		host.appendChild(editButton);
 
 		editButton.onclick = () => {
-			
+			fetch(`https://localhost:7085/UpdateProduct/` + idProductView, {
+				method: "PUT",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					imgUrl: "string",
+					price: 0,
+					description: "string",
+					name: "string",
+					tags: [
+					  "string"
+					],
+					customAttributes: [
+					  {
+						"name": "string",
+						"value": "string"
+					  }
+					]
+				}),
+			});
 		}
 	};
 
