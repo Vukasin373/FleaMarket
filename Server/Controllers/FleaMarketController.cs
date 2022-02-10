@@ -89,10 +89,10 @@ namespace Server.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateProduct/")]
-        public void UpdateProduct([FromBody]Product product)
+        [Route("UpdateProduct/{ProductID}")]
+        public void UpdateProduct([FromBody]Product product, string ProductID)
         {
-            data.UpdateProduct(product);
+            data.UpdateProduct(product, ProductID);
         }
 
         [HttpDelete]
