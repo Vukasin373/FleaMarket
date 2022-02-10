@@ -106,7 +106,7 @@ export class BuyProducts {
 			minInput.value = "0";
 		
 		if (maxInput.value=="")
-			maxInput.value = "999999";
+			maxInput.value = "99999999";
 
 		let asc = false;
 		if (sortSelect.value == "1")
@@ -392,10 +392,15 @@ export class BuyProducts {
 			}).then(p => {
 				if (p.ok)
 					alert("Your offer has been sent ");
+					else if(p.status == 400)
+				{
+					alert("You don't have enough money ")
+				}
+				else
+					console.log("Error");	
 						})
 					}
-				else
-					console.log("Error");		
+					
 		
 			})
 
