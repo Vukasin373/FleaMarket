@@ -22,7 +22,7 @@ export class Profile {
 		 infoH2.innerHTML = "User information";
 		 leftDiv.appendChild(infoH2);
 
-		 const labelArray = ["Username: ","First name: ", "Last name: ", "Contact: ", "City: ", "Money: "];
+		 const labelArray = ["Username: ","First name: ", "Last name: ", "Phone number: ", "City: ", "Money: "];
 		 const infoArray = [user.username, user.firstName, user.lastName, user.contact, user.city, user.money];
 
 		 labelArray.forEach((element,i) => {
@@ -179,7 +179,7 @@ export class Profile {
 		 middleDiv.appendChild(thirdMiddleDiv);
 
 		 const contactH2 = document.createElement("h2");
-		 contactH2.innerHTML = "Change contact";
+		 contactH2.innerHTML = "Change phone number";
 		 thirdMiddleDiv.appendChild(contactH2);
 
 		 const row4 = document.createElement("div");
@@ -187,7 +187,7 @@ export class Profile {
 		 thirdMiddleDiv.appendChild(row4);
 
 		 const contactLabel = document.createElement("label");
-		 contactLabel.innerHTML = "New contact: ";
+		 contactLabel.innerHTML = "New phone number: ";
 		 contactLabel.className="lab2";
 		 row4.appendChild(contactLabel);
 		 

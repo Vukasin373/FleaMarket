@@ -119,8 +119,8 @@ body {
 }
 
 .img2 {
-	width: 100%;
-
+	width: 40%;
+	height: auto;
 	margin-right: 50px;
 }
 
@@ -129,11 +129,13 @@ body {
 	flex-direction: column;
 	margin-top: 10px;
 	margin-left: 80px;
+	width: 80%;
 }
 
 .rightFirstDiv2 {
 	display: flex;
 	flex-direction: column;
+	max-width: 60%;
 }
 
 .barterDiv2 {

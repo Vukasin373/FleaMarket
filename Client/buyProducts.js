@@ -106,7 +106,7 @@ export class BuyProducts {
 			minInput.value = "0";
 		
 		if (maxInput.value=="")
-			maxInput.value = "999999";
+			maxInput.value = "99999999";
 
 		let asc = false;
 		if (sortSelect.value == "1")
@@ -124,10 +124,11 @@ export class BuyProducts {
 							products[p].name,
 							products[p].price,
 							products[p].username,
+							products[p].product,
 							products[p].tags,
-							products[p].imgUrl,
-							products[p].product
+							products[p].imgUrl
 						);
+						console.log(product);
 						this.drawProductViewForBuy(productsDiv, product);
 						br++;
 					
@@ -192,8 +193,8 @@ export class BuyProducts {
 
 		const image = document.createElement("img");
 		image.className = "image img3";
-		console.log(product.img);
-		image.src = "https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278__340.jpg";
+		//https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278__340.jpg
+		image.src = product.img;
 		element.appendChild(image);
 
 		const content = document.createElement("content");
@@ -253,20 +254,20 @@ export class BuyProducts {
 					p.json().then(productJson => {
 					
 							const product = new Product(
-								productJson.id,
+								productJson._id,
 								productJson.name,
 								productJson.price,
 								productJson.customAttributes,
 								productJson.tags,
-								productJson.img,
+								productJson.imgUrl,
 								productJson.description
 							);
-								console.log(productView);
+								console.log(product);
 							fetch(
-								"https://localhost:7085/FleaMarket/GetUserDetails/" + productView.username)
+								"https://localhost:7085/FleaMarket/GetUserDetails/" + productView.user)
 								.then(q => {
 									q.json().then(userInfo => {
-							this.drawProduct(rightDiv, product, userInfo, productView.username, productView.id);
+							this.drawProduct(rightDiv, product, userInfo, productView.user, productView.id);
 									})
 								})
 							
@@ -282,8 +283,8 @@ export class BuyProducts {
 
 			const img = document.createElement("img");
 			
-			img.src = "https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278__340.jpg";
-			img.className = "img2";
+			img.src =  product.img;
+			img.className = "img2"; 
 			firstDiv.appendChild(img);
 
 			const rightFirstDiv = document.createElement("div");
@@ -306,7 +307,7 @@ export class BuyProducts {
 			
 			product.customAttributes.forEach(element => {
 				let att = document.createElement("h2");
-				att.innerHTML = element.name + " : " + element.value;
+				att.innerHTML = element.name + ": " + element.value;
 				rightDiv.appendChild(att);
 			});
 
@@ -391,10 +392,15 @@ export class BuyProducts {
 			}).then(p => {
 				if (p.ok)
 					alert("Your offer has been sent ");
+					else if(p.status == 400)
+				{
+					alert("You don't have enough money ")
+				}
+				else
+					console.log("Error");	
 						})
 					}
-				else
-					console.log("Error");		
+					
 		
 			})
 

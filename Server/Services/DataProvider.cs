@@ -234,7 +234,6 @@ namespace Server.Services
         {
             var collectionNotification = Session.GetCollection<Notification>("Notifications");
             var notif = collectionNotification.Find<Notification>(x => x._id == ObjectId.Parse(id)).FirstOrDefault<Notification>();
-            Console.WriteLine(notif);
             var collectionUser = Session.GetCollection<User>("Users");
 
 
@@ -260,7 +259,7 @@ namespace Server.Services
 
 
 
-                DeleteProduct(notif.ProductId);
+                DeleteProduct(notif.ProductId, false);
 
 
 
@@ -282,7 +281,6 @@ namespace Server.Services
                 foreach (var item in seller.Notifications)
                 {
                     var duplicate = collectionNotification.Find<Notification>(x => x._id == item && x._id != ObjectId.Parse(id)).FirstOrDefault<Notification>();
-
                     if (duplicate != null)
                     {
                         if (duplicate.ProductId == notif.ProductId)
@@ -313,6 +311,7 @@ namespace Server.Services
             }
             else
             {
+                    Console.WriteLine(id);
                 Notification n = new Notification
                 {
                     Barter = false,
@@ -564,15 +563,15 @@ namespace Server.Services
 
 
 
-        internal void UpdateProduct(Product product)
+        internal void UpdateProduct(Product product, string productID)
         {
             var collectionProduct = Session.GetCollection<Product>("Products");
             var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
 
 
 
-            ProductView pView = collectionProductView.Find<ProductView>(x => x._id == product._id).FirstOrDefault<ProductView>();
-            Product p = collectionProduct.Find<Product>(x => x._id == product._id).FirstOrDefault<Product>();
+            ProductView pView = collectionProductView.Find<ProductView>(x => x._id == ObjectId.Parse(productID)).FirstOrDefault<ProductView>();
+            Product p = collectionProduct.Find<Product>(x => x._id == ObjectId.Parse(pView.Product)).FirstOrDefault<Product>();
 
 
 
@@ -585,7 +584,7 @@ namespace Server.Services
 
 
 
-            var filter = Builders<Product>.Filter.Eq("_Id", product._id);
+            var filter = Builders<Product>.Filter.Eq("_Id", ObjectId.Parse(pView.Product));
 
 
 
@@ -607,7 +606,7 @@ namespace Server.Services
 
 
 
-        internal void DeleteProduct(string id)
+        internal void DeleteProduct(string id, bool notif = true)
         {
             var collectionProduct = Session.GetCollection<Product>("Products");
             var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
@@ -626,7 +625,10 @@ namespace Server.Services
 
             User u = collectionUser.Find<User>(x => x.Username == p.Username).FirstOrDefault<User>();
 
-            this.DeleteNotificationsByProduct(p.Username, id);
+            if (notif)
+                this.DeleteNotificationsByProduct(p.Username, id);
+
+            System.Console.WriteLine(notif);
 
             u.Products.Remove(objectId);
 
