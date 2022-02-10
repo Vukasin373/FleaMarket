@@ -583,10 +583,10 @@ namespace Server.Services
             p.CustomAttributes = product.CustomAttributes;
 
 
+            var filter = Builders<Product>.Filter.Eq("_id", ObjectId.Parse(pView.Product));
 
-            var filter = Builders<Product>.Filter.Eq("_Id", ObjectId.Parse(pView.Product));
-
-
+            //var update = Builders<Product>.Update.Set("Name", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            //collectionProduct.UpdateOne(filter, update);
 
             collectionProduct.ReplaceOne(filter, p);
 
@@ -594,10 +594,12 @@ namespace Server.Services
 
             pView.Price = product.Price;
             pView.Name = product.Name;
+            pView.ImgUrl = product.ImgUrl;
+            pView.Tags = product.Tags;
 
 
 
-            var filter2 = Builders<ProductView>.Filter.Eq("_Id", product._id);
+            var filter2 = Builders<ProductView>.Filter.Eq("_id", ObjectId.Parse(productID));
 
 
 
