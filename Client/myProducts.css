@@ -8,13 +8,22 @@
 
 .leftSide3 {
 	/* border: 3px solid salmon; */
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.list3 {
+	/* border: 3px solid purple; */
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
 }
 
 .item3 {
 	display: flex;
 	align-items: stretch;
 	/* border: 3px solid saddlebrown; */
-	padding: 3px;
 	border-bottom: 1px solid black;
 	margin-top: 10px;
 	max-width: 100%;
@@ -29,7 +38,6 @@
 
 .content3 {
 	/* border: 3px solid purple; */
-	padding: 3px;
 	display: flex;
 	flex-direction: column;
 	overflow-wrap: break-word;
@@ -85,7 +93,7 @@
 }
 
 .upper3 {
-	border: 3px solid black;
+	/* border: 3px solid black; */
 	display: flex;
 }
 
@@ -126,15 +134,49 @@
 }
 
 .lower3 {
-	border: 3px solid red;
+	/* border: 3px solid red; */
 	display: flex;
+	margin-top: 15px;
 }
 
 .customAttributes3 {
-	border: 3px solid wheat;
+	/* border: 3px solid rgb(51, 45, 34); */
 	padding: 3px;
 }
 
 .tags3 {
-	border: 3px solid brown;
+	/* border: 3px solid yellow; */
+	display: flex;
+	flex-direction: column;
+	margin-left: 75px;
+}
+
+.attributesPart3 {
+	/* border: 3px solid navy; */
+	display: flex;
+	flex-direction: column;
+}
+
+.attributeContainer3 {
+	margin: 5px;
+}
+
+.buttonPart3 {
+	/* border: 3px solid rgb(11, 240, 11); */
+	margin: 15px;
+	display: flex;
+	justify-content: space-around;
+}
+
+.attributeName3 {
+	margin-right: 15px !important;
+}
+
+.attributeHeader3 {
+	margin-right: 98px;
+	margin-left: 7px;
+}
+
+.tagsPart3 {
+	/* border: 3px solid lightslategray; */
 }

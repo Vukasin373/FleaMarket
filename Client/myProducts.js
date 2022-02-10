@@ -122,10 +122,12 @@ export class MyProducts {
 			});
 		};
 
-		
+		//
+		// crtanje proizvoda
+		//
 
 		let list = document.createElement("div");
-		list.className = "ui relaxed list";
+		list.className = "ui relaxed list list3";
 		leftSide.appendChild(list);	
 
 		let count = 0;
@@ -211,7 +213,6 @@ export class MyProducts {
 					headers: { "Content-Type": "application/json" },
 				}
 			).then((p) => {
-				// 
 				alert("Uspesno ste obrisali proizvod sa nazivom: " + product.name);
 				host.removeChild(element);
 			});
@@ -233,6 +234,7 @@ export class MyProducts {
 			container.appendChild(form);
 
 			fetch("https://localhost:7085/FleaMarket/GetProductDetails/" + product.product).then((p) => {
+				console.log(product.id);
 				p.json().then((product) => {
 					let prod = new Product(
 						product._id,
@@ -244,7 +246,6 @@ export class MyProducts {
 						product.customAttributes
 						);
 						
-						//console.log(product);
 						this.drawNewProductForm(form, product);
 				});
 			});
@@ -293,6 +294,10 @@ export class MyProducts {
 		description.className = "description3";
 		elContainer.appendChild(description);
 
+		//
+		// donji deo
+		//
+
 		const lower = document.createElement("div");
 		lower.className = "lower3";
 		host.appendChild(lower);
@@ -301,20 +306,77 @@ export class MyProducts {
 		customAttributes.className = "customAttributes3";
 		lower.appendChild(customAttributes);
 
-		// console.log(product.customAttributes);
-		// console.log(product.customAttributes.length);
+		// header
+		const headerContainer = document.createElement("div");
+		headerContainer.className = " headerContainer3";
+		customAttributes.appendChild(headerContainer);
+	
+		let el = document.createElement("label");
+		el.innerHTML = "Attribute name: ";
+		el.className = "attributeHeader3";
+		headerContainer.appendChild(el);
+	
+		const headerValue = document.createElement("label");
+		headerValue.innerHTML = "Attribute value: "
+		headerContainer.appendChild(headerValue);
+
+		const attributesPart = document.createElement("div");
+		attributesPart.className = "attributesPart3";
+		customAttributes.appendChild(attributesPart);
 
 		for(let i = 0; i < product.customAttributes.length; i++)
 		{
-			this.drawCustomAttribute(customAttributes, product.customAttributes[i]);
+			this.drawCustomAttribute(attributesPart, product.customAttributes[i]);
 		}
+
+		const buttonPart = document.createElement("div");
+		buttonPart.className = "buttonPart3";
+		customAttributes.appendChild(buttonPart);
+
+		const buttonAttribute = document.createElement("button");
+		buttonAttribute.className = "large ui green button";
+		buttonAttribute.innerHTML = "Add new attribute";
+		buttonPart.appendChild(buttonAttribute);
+
+		buttonAttribute.onclick = () => {
+			this.drawCustomAttribute(attributesPart, {name : "", value: ""});
+		}
+
+		//
+		// deo za tagove
+		//
 
 		const tags = document.createElement("div");
 		tags.className = "tags3";
 		lower.appendChild(tags);
 
-		
+		// header
+		const tagHeader = document.createElement("label");
+		tagHeader.className = " tagHeader3";
+		tagHeader.innerHTML = "Tags: ";
+		tags.appendChild(tagHeader);
 
+		const tagsPart = document.createElement("div");
+		tagsPart.className = "tagsPart3";
+		tags.appendChild(tagsPart);
+
+		for(let i = 0; i < product.tags.length; i++)
+		{
+			this.drawCustomTag(tagsPart, product.tags[i]);
+		}
+
+		const buttonBoxTags = document.createElement("div");
+		buttonBoxTags.className = "buttonPart3";
+		tags.appendChild(buttonBoxTags);
+
+		const buttonTag = document.createElement("button");
+		buttonTag.className = "large ui green button";
+		buttonTag.innerHTML = "Add new tag";
+		buttonBoxTags.appendChild(buttonTag);
+
+		buttonTag.onclick = () => {
+			this.drawCustomTag(tagsPart, "");
+		}
 	};
 
 	drawFormElement(host, lblText, type, className, initial) {
@@ -331,26 +393,62 @@ export class MyProducts {
 		el.type = type;
 		el.value = initial;
 		elContainer.appendChild(el);
-	  }
-
+	};
 
 	drawCustomAttribute(host, attribute)
 	{
-		console.log(attribute.name);
-		console.log(attribute.value);
-
 		const elContainer = document.createElement("div");
-		elContainer.className = "ui input focus elContainer3";
+		elContainer.className = "ui input focus attributeContainer3";
 		host.appendChild(elContainer);
 	
-		const label = document.createElement("label");
-		label.className = "label3";
-		label.innerHTML = lblText;
-		elContainer.appendChild(label);
-	
-		const el = document.createElement("input");
-		el.type = type;
-		el.value = initial;
+		let el = document.createElement("input");
+		el.type = "text";
+		el.value = attribute.name;
+		el.className = "attributeName3";
 		elContainer.appendChild(el);
+	
+		el = document.createElement("input");
+		el.type = "text";
+		el.value = attribute.value;
+		elContainer.appendChild(el);
+
+		// dugme za brisanje atributa
+		const deleteButton = document.createElement("button");
+		deleteButton.className = "mini ui right floated red icon button";
+		elContainer.appendChild(deleteButton);
+
+		const trashIcon = document.createElement("i");
+		trashIcon.className = "trash icon";
+		deleteButton.appendChild(trashIcon);
+
+		deleteButton.onclick = () => {
+			host.removeChild(elContainer);
+		};
+	};
+
+	drawCustomTag(host, tag)
+	{
+		const elContainer = document.createElement("div");
+		elContainer.className = "ui input focus attributeContainer3";
+		host.appendChild(elContainer);
+		
+		let el = document.createElement("input");
+		el.type = "text"; 
+		el.value = tag;
+		el.className = "attributeName3";
+		elContainer.appendChild(el);
+
+		// dugme za brisanje taga
+		const deleteButton = document.createElement("button");
+		deleteButton.className = "mini ui right floated red icon button";
+		elContainer.appendChild(deleteButton);
+
+		const trashIcon = document.createElement("i");
+		trashIcon.className = "trash icon";
+		
+		deleteButton.appendChild(trashIcon);
+		deleteButton.onclick = () => {
+			host.removeChild(elContainer);
+		};
 	}
 }
