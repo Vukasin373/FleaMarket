@@ -395,17 +395,17 @@ export class MyProducts {
 				method: "PUT",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
-					imgUrl: "string",
-					price: 0,
-					description: "string",
-					name: "string",
+					imgUrl: "https://i.imgur.com/4DU4YzF.jpeg",
+					price: 999,
+					description: "ana",
+					name: "ana",
 					tags: [
-					  "string"
+					  "ana"
 					],
 					customAttributes: [
 					  {
-						"name": "string",
-						"value": "string"
+						"ana": "ana",
+						"ana": "ana"
 					  }
 					]
 				}),
