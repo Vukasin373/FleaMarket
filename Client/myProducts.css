@@ -1,13 +1,11 @@
 .MyProducts3 {
-	/* border: 3px solid cyan; */
-	max-width: 50%;
+	border: 3px solid cyan;
 	overflow-wrap: break-word;
-
 	display: flex;
 }
 
 .leftSide3 {
-	/* border: 3px solid salmon; */
+	border: 3px solid salmon;
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
@@ -90,11 +88,13 @@
 	border: 3px solid lightseagreen;
 	display: flex;
 	flex-direction: column;
+	max-width: 80%;
 }
 
 .upper3 {
 	/* border: 3px solid black; */
 	display: flex;
+	justify-content: center;
 }
 
 .upperLeft3 {
@@ -108,8 +108,8 @@
 }
 
 .formImage3 {
-	/* width: 200px;
-	height: 150px; */
+	width: 200px;
+	height: 150px;
 }
 
 .elContainer3 {

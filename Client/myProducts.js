@@ -59,7 +59,7 @@ export class MyProducts {
 							products[p].tags,
 							products[p].imgUrl
 						);
-						this.drawProductView(list, product,  this.container);
+						this.drawProductView(list, product,  this.container, form);
 					}
 
 					console.log(this.pageNum);
@@ -113,7 +113,7 @@ export class MyProducts {
 							products[p].tags,
 							products[p].imgUrl
 						);
-						this.drawProductView(list, product, this.container);
+						this.drawProductView(list, product, this.container, form);
 					}
 
 					if (num < 10)
@@ -147,7 +147,7 @@ export class MyProducts {
 						products[p].imgUrl
 					);
 					count++;
-					this.drawProductView(list, product, this.container);
+					this.drawProductView(list, product, this.container, form);
 					//console.log(product);
 				}
 				if(count < 10)
@@ -157,11 +157,14 @@ export class MyProducts {
 			});
 		});
 
+		let form = document.createElement("div");
+		form.className = "form3";
+		this.container.appendChild(form);
 	};
 
-	drawProductView(host, product, container) {
+	drawProductView(host, product, container, form) {
 
-		const element = document.createElement("div");
+		let element = document.createElement("div");
 		element.className = "item3";
 		element.id = product.id;
 		host.appendChild(element);
@@ -229,12 +232,14 @@ export class MyProducts {
 		contentBottom.appendChild(button);
 
 		button.onclick = () => {
-			const form = document.createElement("div");
+
+			container.removeChild(document.querySelector(".form3"));
+			
+			form = document.createElement("div");
 			form.className = "form3";
 			container.appendChild(form);
 
 			fetch("https://localhost:7085/FleaMarket/GetProductDetails/" + product.product).then((p) => {
-				console.log(product.id);
 				p.json().then((product) => {
 					let prod = new Product(
 						product._id,
@@ -376,6 +381,15 @@ export class MyProducts {
 
 		buttonTag.onclick = () => {
 			this.drawCustomTag(tagsPart, "");
+		}
+
+		// edit dugme
+		const editButton = document.createElement("button");
+		editButton.className = "large ui green button";
+		editButton.innerHTML = "Save changes";
+		host.appendChild(editButton);
+
+		editButton.onclick = () => {
 		}
 	};
 
