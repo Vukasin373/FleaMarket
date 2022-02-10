@@ -65,6 +65,8 @@ export class NotificationsAndBarter {
 								}
 							).then((p) => {
 								notif.parentNode.removeChild(notif);
+								host.removeChild(mainDiv1);
+								this.draw(host);
 							});
 						};
 

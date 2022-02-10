@@ -3,7 +3,7 @@ body {
 }
 
 .banner1 {
-	height: auto;
+	height: 321.35px;
 	width: 500px;
 	margin: 30px;
 }
@@ -28,8 +28,6 @@ body {
 	width: 500px;
 }
 
-
-
 .main1 {
 	display: flex;
 	justify-content: space-around;
@@ -47,8 +45,6 @@ body {
 
 .hubBottom {
 	display: flex;
-	
-	
 }
 
 .profile2 {
@@ -69,7 +65,6 @@ body {
 .middleDiv2 {
 	display: flex;
 	flex-direction: column;
-	
 }
 
 .subMiddleDiv2 {
@@ -81,14 +76,12 @@ body {
 	margin: 30px;
 }
 
-
 .lab2 {
 	align-self: center;
 	margin-right: 5px;
 }
 
 .button2 {
-	
 	width: 40%;
 }
 
@@ -103,23 +96,17 @@ body {
 	flex-wrap: wrap;
 }
 
-
 .buyProducts2 {
 	display: flex;
-
 }
 
 .partLeft2 {
 	display: flex;
 	flex-direction: column;
-
 }
-
-
 
 .move2 {
 	margin: 10px;
-	
 }
 
 .buttonPage {
@@ -135,7 +122,6 @@ body {
 	width: 40%;
 	height: auto;
 	margin-right: 50px;
-	
 }
 
 .partRight2 {
