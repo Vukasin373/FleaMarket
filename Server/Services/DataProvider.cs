@@ -98,7 +98,7 @@ namespace Server.Services
             {
                 Name = product.Name,
                 Price = product.Price,
-                Username = user._id.ToString(),
+                Username = user.Username,
                 Tags = product.Tags,
                 ImgUrl = product.ImgUrl,
                 Product = p._id.ToString()
@@ -189,25 +189,25 @@ namespace Server.Services
 
 
 
-        internal List<Notification> GetNotifications(string username)
+        internal Dictionary<string, Notification> GetNotifications(string username)
         {
             var collectionUser = Session.GetCollection<User>("Users");
             var user = collectionUser.Find(x => x.Username == username).FirstOrDefault();
             var tmp = user.Notifications;
 
+            Dictionary<string, Notification> dict = new Dictionary<string, Notification>();
 
 
             var collectionNotification = Session.GetCollection<Notification>("Notifications");
-            List<Notification> notifications = new List<Notification>();
 
 
 
-            for (int i = user.Notifications.Count - 1; i > user.Notifications.Count - 11; i--)
+            for (int i = user.Notifications.Count - 1; i > user.Notifications.Count - 8; i--)
             {
                 if (i < 0)
                     break;
                 var notif = collectionNotification.Find<Notification>(x => x._id == user.Notifications[i]).FirstOrDefault<Notification>();
-                notifications.Add(notif);
+                dict[notif._id.ToString()] = notif;
 
                 if (notif.Barter == false)
                 {
@@ -225,7 +225,7 @@ namespace Server.Services
 
 
 
-            return notifications;
+            return dict;
         }
 
 
@@ -244,10 +244,15 @@ namespace Server.Services
 
 
             var seller = collectionUser.Find(x => x.Username == username).FirstOrDefault();
+
+            List<ObjectId> tmp = new List<ObjectId>();
+            foreach (var item in seller.Notifications)
+            {
+                tmp.Add(item);
+            }
             var filterSeller = Builders<User>.Filter.Eq("Username", username);
             if (answer)
             {
-
 
 
                 var update = Builders<User>.Update.Set("Money", seller.Money + notif.Price);
@@ -272,6 +277,39 @@ namespace Server.Services
 
 
                 CreateNotification(n, buyer._id.ToString());
+
+                //duplicates
+                foreach (var item in seller.Notifications)
+                {
+                    var duplicate = collectionNotification.Find<Notification>(x => x._id == item && x._id != ObjectId.Parse(id)).FirstOrDefault<Notification>();
+
+                    if (duplicate != null)
+                    {
+                        if (duplicate.ProductId == notif.ProductId)
+                        {
+                            var buyerDup = collectionUser.Find(x => x.Username == duplicate.Username).FirstOrDefault();
+                            var filterDup = Builders<User>.Filter.Eq("Username", buyerDup.Username);
+                            var updated = Builders<User>.Update.Set("Money", buyerDup.Money + duplicate.Price);
+
+                            collectionUser.UpdateOne(filterDup, updated);
+
+                            tmp.Remove(duplicate._id);
+                            collectionNotification.DeleteOne(Builders<Notification>.Filter.Eq("_id", duplicate._id));
+
+                            Notification nd = new Notification
+                            {
+                                Barter = false,
+                                FirstName = seller.FirstName,
+                                LastName = seller.LastName,
+                                Price = duplicate.Price,
+                                ProductName = duplicate.ProductName,
+                                Username = "Declined"
+                            };
+                            CreateNotification(nd, buyerDup._id.ToString());
+
+                        }
+                    }
+                }
             }
             else
             {
@@ -298,17 +336,66 @@ namespace Server.Services
 
 
 
-            seller.Notifications.Remove(notif._id);
+            tmp.Remove(notif._id);
 
 
 
-            var update2 = Builders<User>.Update.Set("Notifications", seller.Notifications);
+            var update2 = Builders<User>.Update.Set("Notifications", tmp);
             collectionUser.UpdateOne(filterSeller, update2);
 
 
 
             collectionNotification.DeleteOne(Builders<Notification>.Filter.Eq("_id", notif._id));
             return true;
+        }
+
+        private void DeleteNotificationsByProduct(string ownerUsername, string productId)
+        {
+            var collectionUser = Session.GetCollection<User>("Users");
+            var collectionNotification = Session.GetCollection<Notification>("Notifications");
+
+            var seller = collectionUser.Find(x => x.Username == ownerUsername).FirstOrDefault();
+
+            List<ObjectId> tmp = new List<ObjectId>();
+            foreach (var item in seller.Notifications)
+            {
+                tmp.Add(item);
+            }
+            var filterSeller = Builders<User>.Filter.Eq("Username", ownerUsername);
+
+            foreach (var item in seller.Notifications)
+            {
+                var duplicate = collectionNotification.Find<Notification>(x => x._id == item && x.ProductId == productId).FirstOrDefault<Notification>();
+
+                if (duplicate != null)
+                {
+
+                    var buyerDup = collectionUser.Find(x => x.Username == duplicate.Username).FirstOrDefault();
+                    var filterDup = Builders<User>.Filter.Eq("Username", buyerDup.Username);
+                    var updated = Builders<User>.Update.Set("Money", buyerDup.Money + duplicate.Price);
+
+                    collectionUser.UpdateOne(filterDup, updated);
+
+                    tmp.Remove(duplicate._id);
+                    collectionNotification.DeleteOne(Builders<Notification>.Filter.Eq("_id", duplicate._id));
+
+                    Notification nd = new Notification
+                    {
+                        Barter = false,
+                        FirstName = seller.FirstName,
+                        LastName = seller.LastName,
+                        Price = duplicate.Price,
+                        ProductName = duplicate.ProductName,
+                        Username = "Declined"
+                    };
+                    CreateNotification(nd, buyerDup._id.ToString());
+
+
+                }
+            }
+
+            var update2 = Builders<User>.Update.Set("Notifications", tmp);
+            collectionUser.UpdateOne(filterSeller, update2);
         }
 
 
@@ -366,12 +453,12 @@ namespace Server.Services
 
         internal List<String> GetUserDetails(string id)
         {
-            ObjectId userId = ObjectId.Parse(id);
+            //ObjectId userId = ObjectId.Parse(id);
             var collectionUser = Session.GetCollection<User>("Users");
 
 
 
-            var user = collectionUser.Find(x => x._id == userId).FirstOrDefault();
+            var user = collectionUser.Find(x => x.Username == id).FirstOrDefault();
 
 
 
@@ -409,16 +496,16 @@ namespace Server.Services
                           productView.Price <= maxPrice &&
                           productView.Tags.Contains(tag)
                           orderby productView.Price ascending
-                          select productView).Skip<ProductView>((page - 1) * 3).Take<ProductView>(3).ToList<ProductView>();
+                          select productView).Skip<ProductView>((page - 1) * 5).Take<ProductView>(5).ToList<ProductView>();
             }
             else
             {
                 list = (from productView in collectionProductView.AsQueryable()
-                          where productView.Price >= minPrice &&
-                          productView.Price <= maxPrice &&
-                          productView.Tags.Contains(tag)
-                          orderby productView.Price descending
-                          select productView).Skip<ProductView>((page - 1) * 3).Take<ProductView>(3).ToList<ProductView>();
+                        where productView.Price >= minPrice &&
+                        productView.Price <= maxPrice &&
+                        productView.Tags.Contains(tag)
+                        orderby productView.Price descending
+                        select productView).Skip<ProductView>((page - 1) * 5).Take<ProductView>(5).ToList<ProductView>();
             }
 
             foreach (ProductView item in list)
@@ -537,9 +624,9 @@ namespace Server.Services
 
 
 
-            User u = collectionUser.Find<User>(x => x._id == ObjectId.Parse(p.Username)).FirstOrDefault<User>();
+            User u = collectionUser.Find<User>(x => x.Username == p.Username).FirstOrDefault<User>();
 
-
+            this.DeleteNotificationsByProduct(p.Username, id);
 
             u.Products.Remove(objectId);
 
@@ -573,7 +660,7 @@ namespace Server.Services
                     break;
                 ProductView p = collectionProductView.Find(x => x._id == user.Products[i]).FirstOrDefault();
                 dict[p._id.ToString()] = p;
-            
+
             }
 
             return dict;
@@ -583,14 +670,29 @@ namespace Server.Services
 
         public Product GetProductDetails(string id)
         {
-            var collectionView = Session.GetCollection<ProductView>("ProductsView");
-            ProductView productView = collectionView.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
-
-
-
             var collection = Session.GetCollection<Product>("Products");
-            Product product = collection.Find(x => x._id == productView._id).FirstOrDefault();
+            Product product = collection.Find(x => x._id == ObjectId.Parse(id)).FirstOrDefault();
             return product;
+        }
+
+
+        internal bool CheckNotification(string usernameSeller, string usernameBuyer, string idProduct)
+        {
+            var collectionUser = Session.GetCollection<User>("Users");
+            var user = collectionUser.Find(x => x.Username == usernameSeller).FirstOrDefault();
+
+            var collectionNotification = Session.GetCollection<Notification>("Notifications");
+
+
+
+            for (int i = 0; i < user.Notifications.Count; i++)
+            {
+                var notif = collectionNotification.Find<Notification>(x => x._id == user.Notifications[i] && x.Username == usernameBuyer && x.ProductId == idProduct).FirstOrDefault<Notification>();
+                if(notif!=null)
+                    return false;
+            }
+            return true;
+
         }
     }
 }

@@ -63,6 +63,16 @@ namespace Server.Controllers
         }
 
         [HttpGet]
+        [Route("CheckNotification/{usernameSeller}&{usernameBuyer}&{idProduct}")]
+        public IActionResult GetMyProducts(string usernameSeller, string usernameBuyer, string idProduct)
+        {
+            if(data.CheckNotification(usernameSeller, usernameBuyer, idProduct))
+                return Ok();
+            return BadRequest();
+
+        }
+
+        [HttpGet]
         [Route("GetMyProducts/{username}&{page}")]
         public Dictionary<string, ProductView> GetMyProducts(string username, int page)
         {
@@ -146,7 +156,7 @@ namespace Server.Controllers
 
         [HttpGet]
         [Route("GetNotifications/{username}")]
-        public List<Notification> GetNotifications(string username)
+        public Dictionary<string, Notification> GetNotifications(string username)
         {
             return data.GetNotifications(username);
 
