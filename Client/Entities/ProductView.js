@@ -1,11 +1,11 @@
 export class ProductView {
 
-	constructor(id, name, price, username, tags, img, product) {
+	constructor(id, name, price, user, product, tags, img) {
 
 		this.id = id;
 		this.name = name;
 		this.price = price;
-		this.username = username;
+		this.user = user;
 		this.product = product;
 		this.tags = tags;
 		this.img = img;
