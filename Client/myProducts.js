@@ -591,7 +591,7 @@ export class MyProducts {
 		let el = document.createElement("input");
 		el.type = "text";
 		el.value = attribute.name;
-		el.className = "attributeName3" + this.attributeNum;
+		el.className = "attributeName3" + this.attributeNum + " attributeName3";
 		elContainer.appendChild(el);
 
 		el = document.createElement("input");
