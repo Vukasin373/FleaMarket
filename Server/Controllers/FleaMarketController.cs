@@ -46,11 +46,9 @@ namespace Server.Controllers
 
         [HttpPost]
         [Route("CreateProduct/{username}")]
-        public IActionResult CreateProductAsync([FromBody] Product product,string username)
+        public object CreateProductAsync([FromBody] Product product,string username)
         {
-            if (data.CreateProduct(product, username))
-                return Ok();
-            return BadRequest();
+            return data.CreateProduct(product, username);
         }
 
         [HttpPost]

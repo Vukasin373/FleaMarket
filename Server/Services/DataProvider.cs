@@ -74,7 +74,7 @@ namespace Server.Services
 
 
 
-        public bool CreateProduct(Product product, string username)
+        public object CreateProduct(Product product, string username)
         {
             var collectionProduct = Session.GetCollection<Product>("Products");
             var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
@@ -112,7 +112,7 @@ namespace Server.Services
             var filter = Builders<User>.Filter.Eq("Username", user.Username);
             var update = Builders<User>.Update.Set("Products", user.Products);
             collectionUser.UpdateOne(filter, update);
-            return true;
+            return new { productView = pv._id.ToString(), product = pv.Product };
         }
 
         internal bool CreateBarterNotification(Notification notif, string username)

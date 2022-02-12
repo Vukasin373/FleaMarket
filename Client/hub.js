@@ -46,7 +46,7 @@ export class Hub {
 			myProductsButton.classList.add("active");
 
 			this.currentPage.removeChild(this.currentPage.firstChild);
-			let myProducts = new MyProducts();
+			let myProducts = new MyProducts(this.user);
 			myProducts.draw(this.currentPage);
 		};
 
@@ -100,7 +100,7 @@ export class Hub {
 
 		//sta je otvoreno na pocetku
 		this.currentButton = myProductsButton;
-		let myProducts = new MyProducts();
+		let myProducts = new MyProducts(this.user);
 		myProducts.draw(hubBottom);
 	}
 }
