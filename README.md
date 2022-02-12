@@ -1,14 +1,15 @@
 ## **Flea market**
 
 Vec kreirani profili za testiranje su:
+
 Username: aca
-Password aca
+Password: aca
 
 Username: vule
-Password vule2
+Password: vule2
 
 Username: ana
-Password ana
+Password: ana
 
 Proizvodi se pretrazuju preko tagova, neki od postojecih su: car, clothes, tech, pc, laptop, tool.
 
