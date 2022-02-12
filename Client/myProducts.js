@@ -129,7 +129,7 @@ export class MyProducts {
 
 					//console.log(this.count);
 
-					if (num < 10) document.getElementById("myBtn3").disabled = true;
+					if (num < 7) document.getElementById("myBtn3").disabled = true;
 				});
 			});
 		};
@@ -188,7 +188,7 @@ export class MyProducts {
 					//onsole.log(product);
 				}
 				//console.log(this.count);
-				if (this.count < 10) {
+				if (this.count < 7) {
 					document.getElementById("myBtn3").disabled = true;
 				}
 			});
@@ -550,7 +550,7 @@ export class MyProducts {
 				).then((p) => {
 					p.json().then((x) => {
 						console.log(this.count);
-						if (this.count < 10) {
+						if (this.count < 7) {
 							const product = new ProductView(
 								x.productView,
 								document.querySelector(".nameinput3").value,
@@ -597,7 +597,7 @@ export class MyProducts {
 		let el = document.createElement("input");
 		el.type = "text";
 		el.value = attribute.name;
-		el.className = "attributeName3" + this.attributeNum;
+		el.className = "attributeName3" + this.attributeNum + " attributeName3";
 		elContainer.appendChild(el);
 
 		el = document.createElement("input");
