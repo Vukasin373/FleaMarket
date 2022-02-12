@@ -494,11 +494,6 @@ export class MyProducts {
 			for (let i = 0; i < this.attributeNum; i++) {
 				let el;
 				if ((el = document.querySelector(".attributeName3" + i)) !== null) {
-					console.log(
-						document.querySelector(".attributeName3" + i).value +
-							": " +
-							document.querySelector(".attributeValue3" + i).value
-					);
 					attributesArray[arrayIndex] = {
 						Name: document.querySelector(".attributeName3" + i).value,
 						Value: document.querySelector(".attributeValue3" + i).value,
@@ -549,46 +544,48 @@ export class MyProducts {
 					}
 				});
 			} else {
-				fetch(
-					"https://localhost:7085/FleaMarket/CreateProduct/" +
-						this.user.username,
-					{
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							imgUrl: document.querySelector(".imageinput3").value,
-							price: document.querySelector(".priceinput3").value,
-							description: document.querySelector(".description3").value,
-							name: document.querySelector(".nameinput3").value,
-							tags: tagsArray,
-							customAttributes: attributesArray,
-						}),
-					}
-				).then((p) => {
-					p.json().then((x) => {
-						//console.log(this.count);
-						if (this.count < 8) {
-							const product = new ProductView(
-								x.productView,
-								document.querySelector(".nameinput3").value,
-								document.querySelector(".priceinput3").value,
-								this.user.username,
-								x.product,
-								tagsArray,
-								document.querySelector(".imageinput3").value
-							);
-							this.drawProductView(
-								document.querySelector(".list3"),
-								product,
-								document.querySelector(".form3")
-							);
+				if (document.querySelector(".priceinput3").value.indexOf(".") == -1) {
+					fetch(
+						"https://localhost:7085/FleaMarket/CreateProduct/" +
+							this.user.username,
+						{
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({
+								imgUrl: document.querySelector(".imageinput3").value,
+								price: document.querySelector(".priceinput3").value,
+								description: document.querySelector(".description3").value,
+								name: document.querySelector(".nameinput3").value,
+								tags: tagsArray,
+								customAttributes: attributesArray,
+							}),
 						}
-						// ako ih ima tacno 8 onda da se otkljuca dugme Next
-						else document.getElementById("myBtn3").disabled = false;
+					).then((p) => {
+						p.json().then((x) => {
+							//console.log(this.count);
+							if (this.count < 8) {
+								const product = new ProductView(
+									x.productView,
+									document.querySelector(".nameinput3").value,
+									document.querySelector(".priceinput3").value,
+									this.user.username,
+									x.product,
+									tagsArray,
+									document.querySelector(".imageinput3").value
+								);
+								this.drawProductView(
+									document.querySelector(".list3"),
+									product,
+									document.querySelector(".form3")
+								);
+							}
+							// ako ih ima tacno 8 onda da se otkljuca dugme Next
+							else document.getElementById("myBtn3").disabled = false;
+						});
+						alert("You have successfully added a new product!");
+						this.count++;
 					});
-					alert("You have successfully added a new product!");
-					this.count++;
-				});
+				} else alert("You must enter an integer value for the price");
 			}
 		};
 	}
