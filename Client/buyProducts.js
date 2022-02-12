@@ -41,6 +41,10 @@ export class BuyProducts {
 		tagDiv.appendChild(signDiv);
 		row.appendChild(tagDiv);
 
+		tagInput.onkeydown = (ev) => {
+			if (ev.key.match("Enter")) findBut.click();
+		};
+
 		const minDiv = document.createElement("div");
 		minDiv.className = "ui right labeled input move2";
 		const minInput = document.createElement("input");
@@ -131,7 +135,7 @@ export class BuyProducts {
 							products[p].tags,
 							products[p].imgUrl
 						);
-						console.log(product);
+						//console.log(product);
 						this.drawProductViewForBuy(productsDiv, product);
 						br++;
 					}
@@ -267,7 +271,7 @@ export class BuyProducts {
 					productJson.tags,
 					productJson.customAttributes
 				);
-				console.log(product);
+				//console.log(product);
 				fetch(
 					"https://localhost:7085/FleaMarket/GetUserDetails/" + productView.user
 				).then((q) => {
@@ -312,7 +316,7 @@ export class BuyProducts {
 		descriptionH2.innerHTML = "Description: " + product.description;
 		rightFirstDiv.appendChild(descriptionH2);
 
-		console.log(product.customAttributes);
+		//console.log(product.customAttributes);
 		product.customAttributes.forEach((element) => {
 			let att = document.createElement("h2");
 			att.innerHTML = element.name + ": " + element.value;
@@ -339,7 +343,7 @@ export class BuyProducts {
 		contact.className = "fontSize";
 		contact.innerHTML = "Phone number: " + userInfo[3];
 
-		console.log(this.user.username, sellerUsername);
+		//console.log(this.user.username, sellerUsername);
 		if (this.user.username != sellerUsername) {
 			const barterDiv = document.createElement("div");
 			barterDiv.className = "barterDiv2";

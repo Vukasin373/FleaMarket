@@ -68,6 +68,10 @@ export class Start {
 		loginPasswordInput.name = "Password";
 		loginPassword.appendChild(loginPasswordInput);
 
+		loginPasswordInput.onkeydown = (ev) => {
+			if (ev.key.match("Enter")) LoginButton.click();
+		};
+
 		const LoginButton = document.createElement("button");
 		LoginButton.className = "ui green button";
 		LoginButton.innerHTML = "Confirm";
@@ -207,8 +211,12 @@ export class Start {
 		const registerInput4 = document.createElement("input");
 		registerInput4.type = "text";
 		registerInput4.name = "FirstName";
-		registerInput4.placeholder = "Constact";
+		registerInput4.placeholder = "Contact";
 		register4.appendChild(registerInput4);
+
+		registerInput4.onkeydown = (ev) => {
+			if (ev.key.match("Enter")) RegisterButton.click();
+		};
 
 		const RegisterButton = document.createElement("button");
 		RegisterButton.className = "ui green button";
