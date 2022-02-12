@@ -230,7 +230,7 @@ export class MyProducts {
 
 		const price = document.createElement("div");
 		price.id = product.id + "price";
-		price.innerHTML = product.price;
+		price.innerHTML = product.price + " $";
 		price.className = "name3";
 		contentTopLeft.appendChild(price);
 
@@ -329,13 +329,34 @@ export class MyProducts {
 		upper.appendChild(upperRight);
 
 		this.drawFormElement(upperRight, "Name: ", "text", "name", product.name);
-		this.drawFormElement(
-			upperRight,
-			"Price: ",
-			"number",
-			"price",
-			product.price
-		);
+		// this.drawFormElement(
+		// 	upperRight,
+		// 	"Price: ",
+		// 	"number",
+		// 	"price",
+		// 	product.price
+		// );
+
+		const priceContainer = document.createElement("div");
+		// priceContainer.className = "ui input focus elContainer3";
+		priceContainer.className = "ui right labeled input focus elContainer3";
+		upperRight.appendChild(priceContainer);
+
+		const priceLabel = document.createElement("label");
+		priceLabel.className = "label3";
+		priceLabel.innerHTML = "Price: ";
+		priceContainer.appendChild(priceLabel);
+
+		const priceInput = document.createElement("input");
+		priceInput.type = "number";
+		priceInput.value = product.price;
+		priceInput.className = "priceinput3";
+		priceContainer.appendChild(priceInput);
+
+		const cashLabel = document.createElement("div");
+		cashLabel.className = "ui basic label cashLabel3";
+		cashLabel.innerHTML = "$";
+		priceContainer.appendChild(cashLabel);
 
 		if (purpose == "update")
 			this.drawFormElement(
