@@ -1,5 +1,5 @@
 import { ProductView } from "./Entities/ProductView.js";
-import {Product } from "./Entities/Product.js";
+import { Product } from "./Entities/Product.js";
 
 export class BuyProducts {
 	constructor(user) {
@@ -14,7 +14,7 @@ export class BuyProducts {
 
 		this.container = document.createElement("div");
 		this.container.className = "buyProducts2";
-		
+
 		host.appendChild(this.container);
 
 		const leftDiv = document.createElement("div");
@@ -40,7 +40,7 @@ export class BuyProducts {
 		tagDiv.appendChild(tagInput);
 		tagDiv.appendChild(signDiv);
 		row.appendChild(tagDiv);
-		
+
 		const minDiv = document.createElement("div");
 		minDiv.className = "ui right labeled input move2";
 		const minInput = document.createElement("input");
@@ -68,11 +68,11 @@ export class BuyProducts {
 		const sortSelect = document.createElement("select");
 		sortSelect.className = "ui dropdown move2";
 		const option1 = document.createElement("option");
-		option1.value="1";
-		option1.innerHTML = "Ascending"
+		option1.value = "1";
+		option1.innerHTML = "Ascending";
 		const option2 = document.createElement("option");
-		option2.value="2";
-		option2.innerHTML = "Descending"
+		option2.value = "2";
+		option2.innerHTML = "Descending";
 		sortSelect.appendChild(option1);
 		sortSelect.appendChild(option2);
 		row.appendChild(sortSelect);
@@ -86,37 +86,40 @@ export class BuyProducts {
 		productsDiv.className = "productsDiv2";
 		leftDiv.appendChild(productsDiv);
 
-
-
 		findBut.onclick = () => {
 			while (rightDiv.firstChild) {
 				rightDiv.removeChild(rightDiv.lastChild);
 			}
 			this.pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, 1);
-			}
+		};
 	}
 
-	pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, page)
-	{
+	pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, page) {
 		while (productsDiv.firstChild) {
 			productsDiv.removeChild(productsDiv.lastChild);
 		}
 
-		if (minInput.value=="")
-			minInput.value = "0";
-		
-		if (maxInput.value=="")
-			maxInput.value = "99999999";
+		if (minInput.value == "") minInput.value = "0";
+
+		if (maxInput.value == "") maxInput.value = "99999999";
 
 		let asc = false;
-		if (sortSelect.value == "1")
-			asc = true;
-	
+		if (sortSelect.value == "1") asc = true;
+
 		fetch(
-			"https://localhost:7085/FleaMarket/GetSearchResults/" + tagInput.value+"&"+page+"&"+ parseInt(minInput.value)+"&"
-			+parseInt(maxInput.value)+"&" + asc)
-			.then(p => {
-				p.json().then(products => {
+			"https://localhost:7085/FleaMarket/GetSearchResults/" +
+				tagInput.value +
+				"&" +
+				page +
+				"&" +
+				parseInt(minInput.value) +
+				"&" +
+				parseInt(maxInput.value) +
+				"&" +
+				asc
+		)
+			.then((p) => {
+				p.json().then((products) => {
 					let br = 0;
 					for (var p in products) {
 						const product = new ProductView(
@@ -131,62 +134,67 @@ export class BuyProducts {
 						console.log(product);
 						this.drawProductViewForBuy(productsDiv, product);
 						br++;
-					
-						
-			};
-					if(br==0 && page==1)
-					{
-						alert ("No results");
 					}
-					else
-					{
-					let nextButton = document.createElement("button");
-					nextButton.className = "ui green button buttonPage";
-					nextButton.innerHTML = "Next";
+					if (br == 0 && page == 1) {
+						alert("No results");
+					} else {
+						let nextButton = document.createElement("button");
+						nextButton.className = "ui green button buttonPage";
+						nextButton.innerHTML = "Next";
 
-					let prevButton = document.createElement("button");
-					prevButton.className = "ui green button buttonPage";
-					prevButton.innerHTML = "Previous";
+						let prevButton = document.createElement("button");
+						prevButton.className = "ui green button buttonPage";
+						prevButton.innerHTML = "Previous";
 
-					if(br == 5 && page == 1)
-					{
-						productsDiv.appendChild(nextButton);
-					}
-					else if(br == 5 && page > 1)
-					{
-						let rowButtons = document.createElement("div");
-						rowButtons.appendChild(prevButton);
-						rowButtons.appendChild(nextButton);
+						if (br == 5 && page == 1) {
+							productsDiv.appendChild(nextButton);
+						} else if (br == 5 && page > 1) {
+							let rowButtons = document.createElement("div");
+							rowButtons.appendChild(prevButton);
+							rowButtons.appendChild(nextButton);
 
-						productsDiv.appendChild(rowButtons);
-					}
-					else if(br < 5 && page > 1)
-					{
-						productsDiv.appendChild(prevButton);
-					}
-
-					nextButton.onclick = () => {
-						const rightDiv = this.container.querySelector(".partRight2")
-						while (rightDiv.firstChild) {
-							rightDiv.removeChild(rightDiv.lastChild);
+							productsDiv.appendChild(rowButtons);
+						} else if (br < 5 && page > 1) {
+							productsDiv.appendChild(prevButton);
 						}
-						this.pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, page + 1)
+
+						nextButton.onclick = () => {
+							const rightDiv = this.container.querySelector(".partRight2");
+							while (rightDiv.firstChild) {
+								rightDiv.removeChild(rightDiv.lastChild);
+							}
+							this.pageFun(
+								productsDiv,
+								tagInput,
+								minInput,
+								maxInput,
+								sortSelect,
+								page + 1
+							);
+						};
+						prevButton.onclick = () => {
+							const rightDiv = this.container.querySelector(".partRight2");
+							while (rightDiv.firstChild) {
+								rightDiv.removeChild(rightDiv.lastChild);
+							}
+							this.pageFun(
+								productsDiv,
+								tagInput,
+								minInput,
+								maxInput,
+								sortSelect,
+								page - 1
+							);
+						};
 					}
-					prevButton.onclick = () => {
-						const rightDiv = this.container.querySelector(".partRight2")
-						while (rightDiv.firstChild) {
-							rightDiv.removeChild(rightDiv.lastChild);
-						}
-						this.pageFun(productsDiv, tagInput, minInput, maxInput, sortSelect, page - 1)
-					}
-				}
 				});
-			}).catch(q => { console.log("Error")});
-		}
-	
+			})
+			.catch((q) => {
+				console.log("Error");
+			});
+	}
 
-		drawProductViewForBuy(productsDiv, product)
-		{
+	drawProductViewForBuy(productsDiv, product) {
 		const element = document.createElement("div");
 		element.className = "item3";
 		productsDiv.appendChild(element);
@@ -210,14 +218,13 @@ export class BuyProducts {
 		contentTop.appendChild(contentTopLeft);
 
 		const name = document.createElement("div");
-		name.innerHTML = product.name
+		name.innerHTML = product.name;
 		name.className = "name3";
 		contentTopLeft.appendChild(name);
 
 		const price = document.createElement("div");
 		price.innerHTML = product.price + " $";
 		contentTopLeft.appendChild(price);
-
 
 		const contentBottom = document.createElement("div");
 		contentBottom.className = "contentBottom3";
@@ -236,107 +243,104 @@ export class BuyProducts {
 		element.appendChild(line);
 
 		button.onclick = () => {
-			this.getProductDetails(product)
-		}
+			this.getProductDetails(product);
+		};
+	}
+
+	getProductDetails(productView) {
+		const rightDiv = this.container.querySelector(".partRight2");
+		while (rightDiv.firstChild) {
+			rightDiv.removeChild(rightDiv.lastChild);
 		}
 
-		getProductDetails(productView)
-		{
-			const rightDiv = this.container.querySelector(".partRight2");
-			while (rightDiv.firstChild) {
-				rightDiv.removeChild(rightDiv.lastChild);
-			}
-
-			fetch(
-				"https://localhost:7085/FleaMarket/GetProductDetails/" + productView.product)
-				.then(p => {
-					
-					p.json().then(productJson => {
-					
-							const product = new Product(
-								productJson._id,
-								productJson.name,
-								productJson.price,
-								productJson.customAttributes,
-								productJson.tags,
-								productJson.imgUrl,
-								productJson.description
-							);
-								console.log(product);
-							fetch(
-								"https://localhost:7085/FleaMarket/GetUserDetails/" + productView.user)
-								.then(q => {
-									q.json().then(userInfo => {
-							this.drawProduct(rightDiv, product, userInfo, productView.user, productView.id);
-									})
-								})
-							
+		fetch(
+			"https://localhost:7085/FleaMarket/GetProductDetails/" +
+				productView.product
+		).then((p) => {
+			p.json().then((productJson) => {
+				const product = new Product(
+					productJson._id,
+					productJson.imgUrl,
+					productJson.price,
+					productJson.description,
+					productJson.name,
+					productJson.tags,
+					productJson.customAttributes
+				);
+				console.log(product);
+				fetch(
+					"https://localhost:7085/FleaMarket/GetUserDetails/" + productView.user
+				).then((q) => {
+					q.json().then((userInfo) => {
+						this.drawProduct(
+							rightDiv,
+							product,
+							userInfo,
+							productView.user,
+							productView.id
+						);
+					});
 				});
 			});
-		}
-	
-		drawProduct(rightDiv, product, userInfo, sellerUsername, idProduct)
-		{
-			const firstDiv = document.createElement("div");
-			firstDiv.className = "firstDiv2";
-			rightDiv.appendChild(firstDiv);
+		});
+	}
 
-			const img = document.createElement("img");
-			
-			img.src =  product.img;
-			img.className = "img2"; 
-			firstDiv.appendChild(img);
+	drawProduct(rightDiv, product, userInfo, sellerUsername, idProduct) {
+		const firstDiv = document.createElement("div");
+		firstDiv.className = "firstDiv2";
+		rightDiv.appendChild(firstDiv);
 
-			const rightFirstDiv = document.createElement("div");
-			rightFirstDiv.className = "rightFirstDiv2";
-			firstDiv.appendChild(rightFirstDiv);
+		const img = document.createElement("img");
 
-			const nameH2 = document.createElement("h2");
-			nameH2.innerHTML = "Name: "+product.name;
-			rightFirstDiv.appendChild(nameH2);
+		img.src = product.img;
+		img.className = "img2";
+		firstDiv.appendChild(img);
 
-			const priceH2 = document.createElement("h2");
-			priceH2.innerHTML = "Price: "+product.price +"$";
-			rightFirstDiv.appendChild(priceH2);
+		const rightFirstDiv = document.createElement("div");
+		rightFirstDiv.className = "rightFirstDiv2";
+		firstDiv.appendChild(rightFirstDiv);
 
-			const descriptionH2 = document.createElement("h2");
-			descriptionH2.innerHTML = "Description: "+product.description;
-			rightFirstDiv.appendChild(descriptionH2);
-			
-			
-			
-			product.customAttributes.forEach(element => {
-				let att = document.createElement("h2");
-				att.innerHTML = element.name + ": " + element.value;
-				rightDiv.appendChild(att);
-			});
+		const nameH2 = document.createElement("h2");
+		nameH2.innerHTML = "Name: " + product.name;
+		rightFirstDiv.appendChild(nameH2);
 
-			const lab = document.createElement("h2");
-			lab.innerHTML = "Seller info:";
-			lab.style.marginTop  = "50px";
-			rightDiv.appendChild(lab);
+		const priceH2 = document.createElement("h2");
+		priceH2.innerHTML = "Price: " + product.price + "$";
+		rightFirstDiv.appendChild(priceH2);
 
+		const descriptionH2 = document.createElement("h2");
+		descriptionH2.innerHTML = "Description: " + product.description;
+		rightFirstDiv.appendChild(descriptionH2);
 
-			const name = document.createElement("div");
-			rightDiv.appendChild(name);
-			name.className = "fontSize";
-			name.innerHTML = "Full name: " +userInfo[0] + " " +userInfo[1];
+		console.log(product.customAttributes);
+		product.customAttributes.forEach((element) => {
+			let att = document.createElement("h2");
+			att.innerHTML = element.name + ": " + element.value;
+			rightDiv.appendChild(att);
+		});
 
-			const city = document.createElement("div");
-			rightDiv.appendChild(city);
-			city.className = "fontSize";
-			city.innerHTML = "City: " +userInfo[2];
+		const lab = document.createElement("h2");
+		lab.innerHTML = "Seller info:";
+		lab.style.marginTop = "50px";
+		rightDiv.appendChild(lab);
 
-			const contact = document.createElement("div");
-			rightDiv.appendChild(contact);
-			contact.className = "fontSize";
-			contact.innerHTML = "Phone number: " +userInfo[3];
+		const name = document.createElement("div");
+		rightDiv.appendChild(name);
+		name.className = "fontSize";
+		name.innerHTML = "Full name: " + userInfo[0] + " " + userInfo[1];
 
-			
-			console.log(this.user.username, sellerUsername);
-			if(this.user.username != sellerUsername)
-			{
+		const city = document.createElement("div");
+		rightDiv.appendChild(city);
+		city.className = "fontSize";
+		city.innerHTML = "City: " + userInfo[2];
 
+		const contact = document.createElement("div");
+		rightDiv.appendChild(contact);
+		contact.className = "fontSize";
+		contact.innerHTML = "Phone number: " + userInfo[3];
+
+		console.log(this.user.username, sellerUsername);
+		if (this.user.username != sellerUsername) {
 			const barterDiv = document.createElement("div");
 			barterDiv.className = "barterDiv2";
 			barterDiv.style.alignSelf = "end";
@@ -349,65 +353,60 @@ export class BuyProducts {
 			const semanticBarter = document.createElement("div");
 			semanticBarter.className = "ui right labeled input";
 			barterDiv.appendChild(semanticBarter);
-		
+
 			const inpBarter = document.createElement("input");
 			semanticBarter.appendChild(inpBarter);
 			inpBarter.type = "number";
-			
-			const div =document.createElement("div");
+
+			const div = document.createElement("div");
 			div.className = "ui basic label";
 			div.innerHTML = "$";
 			semanticBarter.appendChild(div);
-			
-			
+
 			const buttBarter = document.createElement("button");
 			buttBarter.className = "ui green button";
 			buttBarter.innerHTML = "Begin barter";
 			barterDiv.appendChild(buttBarter);
 
 			buttBarter.onclick = () => {
-				let price =parseInt(inpBarter.value);
+				let price = parseInt(inpBarter.value);
 
 				fetch(
-					"https://localhost:7085/FleaMarket/CheckNotification/" + sellerUsername +"&"+this.user.username+"&"+idProduct)
-					.then(q => {
-						if(q.status==400)
-						{
-							alert("Your offer is already sent !");
-						}
-						else if(q.status == 200)
-						{
-							fetch(`https://localhost:7085/FleaMarket/CreateNotification/`+sellerUsername, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					username: this.user.username,
-					firstName: this.user.firstName,
-					lastName: this.user.lastName,
-					productName: product.name,
-					productId: idProduct,
-					price: price ,
-					barter: true,
-				}),
-			}).then(p => {
-				if (p.ok)
-					alert("Your offer has been sent ");
-					else if(p.status == 400)
-				{
-					alert("You don't have enough money ")
-				}
-				else
-					console.log("Error");	
-						})
+					"https://localhost:7085/FleaMarket/CheckNotification/" +
+						sellerUsername +
+						"&" +
+						this.user.username +
+						"&" +
+						idProduct
+				).then((q) => {
+					if (q.status == 400) {
+						alert("Your offer is already sent !");
+					} else if (q.status == 200) {
+						fetch(
+							`https://localhost:7085/FleaMarket/CreateNotification/` +
+								sellerUsername,
+							{
+								method: "POST",
+								headers: { "Content-Type": "application/json" },
+								body: JSON.stringify({
+									username: this.user.username,
+									firstName: this.user.firstName,
+									lastName: this.user.lastName,
+									productName: product.name,
+									productId: idProduct,
+									price: price,
+									barter: true,
+								}),
+							}
+						).then((p) => {
+							if (p.ok) alert("Your offer has been sent ");
+							else if (p.status == 400) {
+								alert("You don't have enough money ");
+							} else console.log("Error");
+						});
 					}
-					
-		
-			})
-
-		
+				});
+			};
 		}
 	}
-		}
-	}
-	
-
+}
