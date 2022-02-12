@@ -119,7 +119,8 @@ body {
 }
 
 .img2 {
-	width: 40%;
+	width: auto;
+	max-height: 300px;
 	height: auto;
 	margin-right: 50px;
 }
