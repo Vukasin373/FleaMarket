@@ -32,8 +32,8 @@
 }
 
 .img3 {
-	width: 120px;
-	height: 80px;
+	max-width: 120px;
+	max-height: 80px;
 }
 
 .content3 {
@@ -110,8 +110,8 @@
 }
 
 .formImage3 {
-	width: 200px;
-	height: 150px;
+	max-width: 200px;
+	max-height: 150px;
 }
 
 .elContainer3 {
