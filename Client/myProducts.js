@@ -43,7 +43,10 @@ export class MyProducts {
 			this.count = 0;
 
 			fetch(
-				"https://localhost:7085/FleaMarket/GetMyProducts/aca&" + this.pageNum
+				"https://localhost:7085/FleaMarket/GetMyProducts/" +
+					this.user.username +
+					"&" +
+					this.pageNum
 			).then((p) => {
 				p.json().then((products) => {
 					// otkljucati next dugme
@@ -108,7 +111,10 @@ export class MyProducts {
 
 			//pribavi produkte
 			fetch(
-				"https://localhost:7085/FleaMarket/GetMyProducts/aca&" + this.pageNum
+				"https://localhost:7085/FleaMarket/GetMyProducts/" +
+					this.user.username +
+					"&" +
+					this.pageNum
 			).then((p) => {
 				p.json().then((products) => {
 					for (var p in products) {
@@ -170,7 +176,11 @@ export class MyProducts {
 		this.count = 0;
 
 		//pribavi produkte
-		fetch("https://localhost:7085/FleaMarket/GetMyProducts/aca&1").then((p) => {
+		fetch(
+			"https://localhost:7085/FleaMarket/GetMyProducts/" +
+				this.user.username +
+				"&1"
+		).then((p) => {
 			p.json().then((products) => {
 				for (var p in products) {
 					//console.log(p);
