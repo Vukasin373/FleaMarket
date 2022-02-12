@@ -549,6 +549,10 @@ export class MyProducts {
 					}
 				});
 			} else {
+				if (document.querySelector(".nameinput3").value == "") {
+					alert("You have to enter product name!");
+					return;
+				}
 				if (document.querySelector(".priceinput3").value.indexOf(".") == -1) {
 					fetch(
 						"https://localhost:7085/FleaMarket/CreateProduct/" +
