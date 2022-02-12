@@ -216,11 +216,16 @@ export class MyProducts {
 		element.id = product.id;
 		host.appendChild(element);
 
+		const imageHolder = document.createElement("div");
+		imageHolder.style =
+			"min-width: 120px;align-items: center;display: flex;justify-content: center;";
+		element.appendChild(imageHolder);
+
 		const image = document.createElement("img");
 		image.className = "image img3";
 		image.src = product.img;
 		image.id = product.id + "image";
-		element.appendChild(image);
+		imageHolder.appendChild(image);
 
 		const content = document.createElement("content");
 		content.className = "content content3";

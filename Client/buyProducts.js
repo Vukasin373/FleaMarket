@@ -203,11 +203,16 @@ export class BuyProducts {
 		element.className = "item3";
 		productsDiv.appendChild(element);
 
+		const imageHolder = document.createElement("div");
+		imageHolder.style =
+			"min-width: 120px;align-items: center;display: flex;justify-content: center;";
+		element.appendChild(imageHolder);
+
 		const image = document.createElement("img");
 		image.className = "image img3";
 		//https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278__340.jpg
 		image.src = product.img;
-		element.appendChild(image);
+		imageHolder.appendChild(image);
 
 		const content = document.createElement("content");
 		content.className = "content content3";
