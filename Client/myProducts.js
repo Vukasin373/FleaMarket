@@ -526,7 +526,7 @@ export class MyProducts {
 						document.getElementById(idProductView + "name").innerHTML =
 							document.querySelector(".nameinput3").value;
 						document.getElementById(idProductView + "price").innerHTML =
-							document.querySelector(".priceinput3").value;
+							document.querySelector(".priceinput3").value + " $";
 						image.src = document.querySelector(".imageinput3").value;
 						alert("You have successfully saved your changes");
 					}
