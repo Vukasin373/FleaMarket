@@ -9,6 +9,8 @@ export class MyProducts {
 		this.tagNum = 0;
 		this.user = user;
 		this.count = 0;
+		this.buttonNewAt;
+		this.buttonNewTag;
 	}
 
 	draw(host) {
@@ -426,6 +428,8 @@ export class MyProducts {
 		buttonAttribute.innerHTML = "Add new attribute";
 		buttonPart.appendChild(buttonAttribute);
 
+		this.buttonNewAt = buttonAttribute;
+
 		buttonAttribute.onclick = () => {
 			this.drawCustomAttribute(attributesPart, { name: "", value: "" });
 		};
@@ -460,6 +464,8 @@ export class MyProducts {
 		buttonTag.className = "large ui green button";
 		buttonTag.innerHTML = "Add new tag";
 		buttonBoxTags.appendChild(buttonTag);
+
+		this.buttonNewTag = buttonTag;
 
 		buttonTag.onclick = () => {
 			this.drawCustomTag(tagsPart, "");
@@ -600,6 +606,9 @@ export class MyProducts {
 		el.className = "attributeValue3" + this.attributeNum;
 		this.attributeNum++;
 		elContainer.appendChild(el);
+		el.onkeydown = (ev) => {
+			if (ev.key.match("Enter")) this.buttonNewAt.click();
+		};
 
 		// dugme za brisanje atributa
 		const deleteButton = document.createElement("button");
@@ -626,6 +635,9 @@ export class MyProducts {
 		el.className = "tagName3" + this.tagNum;
 		this.tagNum++;
 		elContainer.appendChild(el);
+		el.onkeydown = (ev) => {
+			if (ev.key.match("Enter")) this.buttonNewTag.click();
+		};
 
 		// dugme za brisanje taga
 		const deleteButton = document.createElement("button");
