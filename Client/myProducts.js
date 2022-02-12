@@ -490,15 +490,20 @@ export class MyProducts {
 
 		editButton.onclick = () => {
 			let attributesArray = [];
+			let arrayIndex = 0;
 			for (let i = 0; i < this.attributeNum; i++) {
 				let el;
 				if ((el = document.querySelector(".attributeName3" + i)) !== null) {
-					//console.log(document.querySelector(".attributeName3" + i).value + ": " + document.querySelector(".attributeValue3" + i).value);
-					attributesArray[i] = {
+					console.log(
+						document.querySelector(".attributeName3" + i).value +
+							": " +
+							document.querySelector(".attributeValue3" + i).value
+					);
+					attributesArray[arrayIndex] = {
 						Name: document.querySelector(".attributeName3" + i).value,
 						Value: document.querySelector(".attributeValue3" + i).value,
 					};
-					//[{Name : "fshshs", Value : "sjsjsjsj" } ]
+					arrayIndex++;
 				}
 			}
 
@@ -506,10 +511,12 @@ export class MyProducts {
 
 			// niz tagova
 			let tagsArray = [];
+			arrayIndex = 0;
 			for (let i = 0; i < this.tagNum; i++) {
 				let el;
 				if ((el = document.querySelector(".tagName3" + i)) !== null) {
-					tagsArray[i] = document.querySelector(".tagName3" + i).value;
+					tagsArray[arrayIndex] = document.querySelector(".tagName3" + i).value;
+					arrayIndex++;
 				}
 			}
 			//console.log(tagsArray);
@@ -559,8 +566,8 @@ export class MyProducts {
 					}
 				).then((p) => {
 					p.json().then((x) => {
-						console.log(this.count);
-						if (this.count < 7) {
+						//console.log(this.count);
+						if (this.count < 8) {
 							const product = new ProductView(
 								x.productView,
 								document.querySelector(".nameinput3").value,
@@ -576,7 +583,11 @@ export class MyProducts {
 								document.querySelector(".form3")
 							);
 						}
+						// ako ih ima tacno 8 onda da se otkljuca dugme Next
+						else document.getElementById("myBtn3").disabled = false;
 					});
+					alert("You have successfully added a new product!");
+					this.count++;
 				});
 			}
 		};
