@@ -658,7 +658,7 @@ namespace Server.Services
 
             var collectionProductView = Session.GetCollection<ProductView>("ProductsViews");
 
-            for (int i = (page - 1) * 10; i < page * 10; i++)
+            for (int i = (page - 1) * 7; i < page * 7; i++)
             {
                 if (user.Products.Count <= i)
                     break;
