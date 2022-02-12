@@ -181,3 +181,7 @@
 .tagsPart3 {
 	/* border: 3px solid lightslategray; */
 }
+
+.ui.basic.label.cashLabel3 {
+	border: 1px solid #85b7d9 !important;
+}
